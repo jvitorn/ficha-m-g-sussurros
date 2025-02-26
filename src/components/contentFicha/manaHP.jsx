@@ -1,37 +1,38 @@
 "use client";
 import { useState } from 'react';
+import { Form, Row, Col } from 'react-bootstrap';
 
 export default function ContentFichaManaHp() {
   const [mana, setMana] = useState(0);
   const [hp, setHp] = useState(0);
+
   return (
     <>
       {/* Mana & HP */}
-      <div className="row mb-3">
-        <div className="col-6 offset-4">
-        <div className="col-md-4">
-          <label className="form-label">Mana</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Ex: 10"
-            value={mana}
-            onChange={(e) => setMana(e.target.value)}
-          />
-        </div>
-        <div className="col-md-4">
-          <label className="form-label">HP</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Ex: 10"
-            value={mana}
-            onChange={(e) => setMana(e.target.value)}
-          />
-        </div>
-        </div>
-      </div>
-
+      <Row className="mb-3 justify-content-center">
+        <Col md={4} className="offset-md-4">
+          <Form.Group controlId="formMana">
+            <Form.Label>Mana</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Ex: 10"
+              value={mana}
+              onChange={(e) => setMana(Number(e.target.value))}
+            />
+          </Form.Group>
+        </Col>
+        <Col md={4}>
+          <Form.Group controlId="formHp">
+            <Form.Label>HP</Form.Label>
+            <Form.Control
+              type="number"
+              placeholder="Ex: 10"
+              value={hp}
+              onChange={(e) => setHp(Number(e.target.value))}
+            />
+          </Form.Group>
+        </Col>
+      </Row>
     </>
-  )
+  );
 }

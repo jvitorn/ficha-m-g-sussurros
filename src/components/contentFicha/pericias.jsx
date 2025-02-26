@@ -1,30 +1,11 @@
 "use client";
 import { useState, useEffect } from 'react';
-
-import { useAtributos } from '@/context/atributosContext';
+import { Table, Form, Row, Col } from 'react-bootstrap';
+import { useAtributos } from '@/context/fichaContext';
 
 export default function ContentFichaPericias() {
   const { atributos } = useAtributos();
-  // useEffect para atualizar os valores das perícias quando os atributos mudam
-  useEffect(() => {
-    console.log('bateu no effect')
-    const novasPericias = pericias.map((pericia) => {
-      console.log('[Pericia]',pericia)
-      if (pericia.ativo) {
-        console.log('[Pericia ativo]',pericia)
-        const atributoCorrespondente = atributos.find((attr) => attr.sigla === pericia.atributo);
-        console.log('[atributoCorrespondente]', atributoCorrespondente)
-        if (atributoCorrespondente) {
-          return { ...pericia, valor: atributoCorrespondente.value };
-        }
-      }
-      return pericia;
-    });
 
-    setPericias(novasPericias);
-  }, [atributos]); // Executa sempre que os atributos mudam
-
-  // Exemplo de estado para as perícias (cada perícia tem atributos distintos)
   const [pericias, setPericias] = useState([
     { nome: 'Arcana', atributo: 'PM', bonus: '', valor: 0, ativo: false },
     { nome: 'Atletismo', atributo: 'FOR', bonus: '', valor: 0, ativo: false },
@@ -40,40 +21,49 @@ export default function ContentFichaPericias() {
     { nome: 'Percepção', atributo: 'INT', bonus: '', valor: 0, ativo: false },
     { nome: 'Punição', atributo: 'CM', bonus: '', valor: 0, ativo: false },
     { nome: 'Sobrevivência', atributo: 'INT', bonus: '', valor: 0, ativo: false },
-  ])
-  // Função para atualizar uma perícia específica
+  ]);
+
+  // Atualiza as perícias sempre que os atributos mudam
+  useEffect(() => {
+    const novasPericias = pericias.map((pericia) => {
+      if (pericia.ativo) {
+        const atributoCorrespondente = atributos.find((attr) => attr.sigla === pericia.atributo);
+        if (atributoCorrespondente) {
+          // Calcula o bônus como metade do valor do atributo (arredondado para baixo)
+          return { ...pericia, valor: Math.floor(atributoCorrespondente.valor / 2) };
+        }
+      }
+      return pericia;
+    });
+    setPericias(novasPericias);
+  }, [atributos]);
+
   const handleChangePericia = (index, campo, valor) => {
-    const lista = [...pericias]
-    lista[index][campo] = valor
-    setPericias(lista)
-  }
-  // Função para lidar com a mudança do checkbox
-  const handleCheckboxChange = (index) => {
+    const lista = [...pericias];
+    lista[index][campo] = valor;
+    setPericias(lista);
+  };
+
+  const handleCheckboxChange = (index, isAtivo) => {
     const pericia = pericias[index];
-    const novoEstado = !pericia.ativo; // Inverte o estado do checkbox
-    // Atualiza o estado do checkbox
+    const novoEstado = !isAtivo;
     handleChangePericia(index, 'ativo', novoEstado);
 
-    // Se o checkbox estiver ativo, busca o valor do atributo correspondente
     if (novoEstado) {
       const atributoCorrespondente = atributos.find((attr) => attr.sigla === pericia.atributo);
-      console.log('[atributoCorrespondente]', atributoCorrespondente)
       if (atributoCorrespondente) {
-        handleChangePericia(index, 'valor', atributoCorrespondente.valor);
+        handleChangePericia(index, 'valor', Number(atributoCorrespondente.valor));
       }
     } else {
-      // Se o checkbox estiver desativado, reseta o valor da perícia
       handleChangePericia(index, 'valor', 0);
     }
   };
 
   return (
     <>
-      {/* Mana & HP */}
-      <div className="row mb-3">
-        {/* Seção de Perícias */}
+      <Row className="mb-3">
         <h4 className="mt-4 mb-2">Perícias</h4>
-        <table className="table table-striped table-bordered">
+        <Table striped bordered hover responsive>
           <thead>
             <tr>
               <th style={{ width: '25%' }}>Perícia</th>
@@ -88,27 +78,26 @@ export default function ContentFichaPericias() {
                 <td>{per.nome}</td>
                 <td>{per.atributo}</td>
                 <td>
-                  <input
+                  <Form.Control
                     type="text"
-                    className="form-control form-control-sm"
+                    size="sm"
                     placeholder="+0"
-                    value={per.bonus}
-                    onChange={(e) => handleChangePericia(index, 'bonus', e.target.value)}
+                    value={per.valor}
+                    disabled
                   />
                 </td>
                 <td className="text-center">
-                  <input
+                  <Form.Check
                     type="checkbox"
                     checked={per.ativo}
-                    onChange={() => handleCheckboxChange(index)}
+                    onChange={() => handleCheckboxChange(index, per.ativo)}
                   />
                 </td>
               </tr>
             ))}
           </tbody>
-        </table>
-      </div>
-
+        </Table>
+      </Row>
     </>
-  )
+  );
 }

@@ -1,34 +1,37 @@
 "use client";
 import { useState } from 'react';
+import { Form, Row, Col } from 'react-bootstrap';
 
 export default function ContentFichaNome() {
   const [nomePersonagem, setNomePersonagem] = useState('');
-
   const [corGrimorio, setCorGrimorio] = useState('');
+
   return (
     <>
-      <div className="row mb-3">
-        <div className="col-md-6">
-          <label className="form-label">Personagem</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Nome do Personagem"
-            value={nomePersonagem}
-            onChange={(e) => setNomePersonagem(e.target.value)}
-          />
-        </div>
-        <div className="col-md-6">
-          <label className="form-label">Cor do Grimorio</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Cor do Grimorio"
-            value={corGrimorio}
-            onChange={(e) => setCorGrimorio(e.target.value)}
-          />
-        </div>
-      </div>
+      <Row className="mb-3">
+        <Col md={6}>
+          <Form.Group controlId="formNomePersonagem">
+            <Form.Label>Personagem</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Nome do Personagem"
+              value={nomePersonagem}
+              onChange={(e) => setNomePersonagem(e.target.value)}
+            />
+          </Form.Group>
+        </Col>
+        <Col md={6}>
+          <Form.Group controlId="formCorGrimorio">
+            <Form.Label>Cor do Grimório</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Cor do Grimório"
+              value={corGrimorio}
+              onChange={(e) => setCorGrimorio(e.target.value)}
+            />
+          </Form.Group>
+        </Col>
+      </Row>
     </>
-  )
+  );
 }

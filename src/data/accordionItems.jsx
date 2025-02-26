@@ -1,7 +1,6 @@
+// src/data/accordionItems.jsx
 "use client";
 
-import { AtributosProvider } from '@/context/atributosContext';
-// Importa os componentes que serão utilizados
 import ContentFichaAtributos from "@/components/contentFicha/atributos";
 import ContentFichaNome from "@/components/contentFicha/nome";
 import ContentFichaManaHp from "@/components/contentFicha/manaHP";
@@ -17,12 +16,8 @@ const accordionItemsFicha = [
     content: <ContentFichaNome />,
   },
   {
-    title: "Atributos",
-    content: (
-      <AtributosProvider>
-        <ContentFichaAtributos />,
-      </AtributosProvider>
-    ),
+    title: "Atributos & Nivel",
+    content: <ContentFichaAtributos />,
   },
   {
     title: "Mana e HP",
@@ -30,11 +25,7 @@ const accordionItemsFicha = [
   },
   {
     title: "Perícias",
-    content: (
-      <AtributosProvider>
-        <ContentFichaPericias />
-      </AtributosProvider>
-    )
+    content: <ContentFichaPericias />,
   },
   {
     title: "Classe - Subclasses e Resistências",

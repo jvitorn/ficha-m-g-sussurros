@@ -1,45 +1,44 @@
 "use client";
 import { useState } from 'react';
+import { Row, Col, Form } from 'react-bootstrap';
 
 export default function ContentFichaClasse() {
   const [raca, setRaca] = useState('');
   const [subclasses, setSubclasses] = useState('');
   const [resFisica, setResFisica] = useState('');
+
   return (
     <>
       {/* Raça, Subclasses, Resistências */}
-      <div className="row mb-3">
-        <div className="col-md-4">
-          <label className="form-label">Raça</label>
-          <input
+      <Row className="mb-3">
+        <Col md={4}>
+          <Form.Label>Raça</Form.Label>
+          <Form.Control
             type="text"
-            className="form-control"
             placeholder="Ex: Elfo"
             value={raca}
             onChange={(e) => setRaca(e.target.value)}
           />
-        </div>
-        <div className="col-md-4">
-          <label className="form-label">Subclasses</label>
-          <input
+        </Col>
+        <Col md={4}>
+          <Form.Label>Subclasses</Form.Label>
+          <Form.Control
             type="text"
-            className="form-control"
             placeholder="Ex: Guerreiro Arcano"
             value={subclasses}
             onChange={(e) => setSubclasses(e.target.value)}
           />
-        </div>
-        <div className="col-md-4">
-          <label className="form-label">Resistência Física</label>
-          <input
+        </Col>
+        <Col md={4}>
+          <Form.Label>Resistência Física</Form.Label>
+          <Form.Control
             type="text"
-            className="form-control"
             placeholder="Ex: +2"
             value={resFisica}
             onChange={(e) => setResFisica(e.target.value)}
           />
-        </div>
-      </div>
+        </Col>
+      </Row>
     </>
-  )
+  );
 }
