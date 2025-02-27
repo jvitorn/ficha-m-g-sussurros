@@ -20,16 +20,16 @@ const accordionItemsFicha = [
     content: <ContentFichaAtributos />,
   },
   {
+    title: "Classe - Subclasses e Resistências",
+    content: <ContentFichaClasse />,
+  },
+  {
     title: "Mana e HP",
     content: <ContentFichaManaHp />,
   },
   {
     title: "Perícias",
     content: <ContentFichaPericias />,
-  },
-  {
-    title: "Classe - Subclasses e Resistências",
-    content: <ContentFichaClasse />,
   },
   {
     title: "Mágias Únicas",
