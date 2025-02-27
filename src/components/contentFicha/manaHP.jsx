@@ -5,8 +5,6 @@ import { Form, Row, Col } from 'react-bootstrap';
 import SubtituloFicha from '@/components/subtituloFicha';
 
 export default function ContentFichaManaHp() {
-  const [mana, setMana] = useState(0);
-  const [hp, setHp] = useState(0);
   const [manaDisponivel, setManaDisponivel] = useState(0);
   const [manaTotal, setManaTotal] = useState(0);
 
@@ -25,7 +23,7 @@ export default function ContentFichaManaHp() {
                 className={manaDisponivel < 0 ? 'text-danger' : ''} // Destaca negativo
               />
             </Col>
-            {/* Pontos totais do nível */}
+            {/* Pontos totais de mana */}
             <Col xs={6} md={4}>
               <Form.Label>Total</Form.Label>
               <Form.Control
@@ -36,7 +34,7 @@ export default function ContentFichaManaHp() {
             </Col>
           </Row>
         </Col>
-        {/* Painel de pontos de atribuição */}
+        {/* Vida */}
         <Col xs={12} md={6} className="text-center">
           <SubtituloFicha texto='HP' />
           <Row>

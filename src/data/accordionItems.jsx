@@ -16,7 +16,7 @@ const accordionItemsFicha = [
     content: <ContentFichaNome />,
   },
   {
-    title: "Atributos & Nivel",
+    title: "Atributos & Nivel *",
     content: <ContentFichaAtributos />,
   },
   {
@@ -28,7 +28,7 @@ const accordionItemsFicha = [
     content: <ContentFichaManaHp />,
   },
   {
-    title: "Perícias",
+    title: "Perícias *",
     content: <ContentFichaPericias />,
   },
   {
@@ -36,7 +36,7 @@ const accordionItemsFicha = [
     content: <ContentFichaMagiasUnicas />,
   },
   {
-    title: "Habilidades Mágicas",
+    title: "Habilidades Mágicas *",
     content: <ContentFichaHabilidadesMagicas />,
   },
   {
