@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Row, Col, Form, Button, ListGroup, Alert } from 'react-bootstrap';
 // Componente customizado de subtítulo
 import SubtituloFicha from '@/components/subtituloFicha';
+import ListagemEscolhidaGroup from '@/components/listagemEscolhidaGroup';
 
 const HABILIDADES_MAGICAS = [
   {
@@ -145,7 +146,7 @@ export default function ContentFichaHabilidadesMagicas() {
       return;
     }
 
-    if(LIMIT_HABILIDADES_ESCOLHIDAS <= habilidadesEscolhidas.length) {
+    if (LIMIT_HABILIDADES_ESCOLHIDAS <= habilidadesEscolhidas.length) {
       setErro('Limite de habilidades atingido!');
       return;
     }
@@ -233,7 +234,7 @@ export default function ContentFichaHabilidadesMagicas() {
               <Form.Control
                 type="number"
                 value={PONTOS_TOTAIS}
-                disabled
+                readOnly
               />
             </Col>
           </Row>
@@ -248,53 +249,14 @@ export default function ContentFichaHabilidadesMagicas() {
       </Row>
 
       {/* Lista de Habilidades Escolhidas */}
-      {habilidadesEscolhidas.length > 0 && (
-        <Row className="mb-4">
-          <Col xs={12}>
-            <SubtituloFicha texto="Habilidades Escolhidas" />
-            
-            <ListGroup>
-              {habilidadesEscolhidas.map((habilidade) => (
-                <ListGroup.Item key={habilidade.id} className="mb-3">
-                  <Row className="align-items-center">
-                    <Col xs={12} md={10}>
-                      <div className="fw-bold">{habilidade.nome}</div>
-                      <p className="mb-2 text-muted">{habilidade.descricao}</p>
-                      {habilidade.niveis.map(nivel => (
-                        <Row className="mb-2" key={nivel.nivel}>
-                          <Col xs={12} md={8}>
-                            <p className="mb-1"><strong>Nv. {nivel.nivel}:</strong> {nivel.descricao}</p>
-                            <p className="mb-1 text-muted">Custo: {nivel.ptUso} pts | Status: {nivel.usado || ptDisponiveis < nivel.ptUso ? 'Usado' : 'Disponível'}</p>
-                          </Col>
-                          <Col xs={12} md={4} className="d-grid">
-                            <Button
-                              variant={nivel.usado ? "outline-secondary" : "outline-primary"}
-                              size="sm"
-                              onClick={() => handleUsarNivel(habilidade.id, nivel)}
-                              disabled={nivel.usado || ptDisponiveis < nivel.ptUso}
-                            >
-                              {nivel.usado ? 'Usado' : 'Usar'}
-                            </Button>
-                          </Col>
-                        </Row>
-                      ))}
-                    </Col>
-                    <Col xs={12} md={2} className="d-grid mt-2 mt-md-0">
-                      <Button
-                        variant="outline-danger"
-                        size="sm"
-                        onClick={() => handleRemoverHabilidade(habilidade.id)}
-                      >
-                        Remover
-                      </Button>
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-              ))}
-            </ListGroup>
-          </Col>
-        </Row>
-      )}
+      <ListagemEscolhidaGroup
+        titulo="Habilidades Escolhidas"
+        itens={habilidadesEscolhidas}
+        onRemoverItem={handleRemoverHabilidade}
+        onUsarNivel={handleUsarNivel}
+        pontosDisponiveis={ptDisponiveis}
+        textoNenhumItem="Nenhuma habilidade escolhida."
+      />
 
       {/* Formulário de Seleção */}
       <Row className="mb-3">
@@ -319,12 +281,12 @@ export default function ContentFichaHabilidadesMagicas() {
             as="textarea" 
             rows={3} 
             value={habilidadeSelecionada?.descricao || ''}
-            disabled
+            readOnly
           />
         </Col>
 
         <Col xs={12} className="mt-3">
-        {erro && <Alert variant="danger">{erro}</Alert>}
+          {erro && <Alert variant="danger">{erro}</Alert>}
           <Button
             variant="outline-info"
             onClick={handleAdicionarHabilidade}

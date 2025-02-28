@@ -83,7 +83,7 @@ export default function ContentFichaPericias() {
                     size="sm"
                     placeholder="+0"
                     value={per.valor}
-                    disabled
+                    readOnly
                   />
                 </td>
                 <td className="text-center">

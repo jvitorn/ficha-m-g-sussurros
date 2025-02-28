@@ -1,34 +1,53 @@
 "use client";
 import { useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
+// Componente customizado de subtítulo
+import SubtituloFicha from '@/components/subtituloFicha';
+
+const INSPIRACAO_TOTAL = 3;
 
 export default function ContentFichaInspiracaoDefesa() {
   const [inspiracao, setInspiracao] = useState(0);
-  const [inspiracaoTotal, setInspiracaoTotal] = useState(3);
 
   return (
     <>
-      {/* Raça, Subclasses, Resistências */}
+      {/* Inspiração */}
       <Row className="mb-3">
-        <Col md={4}>
-          <Form.Group controlId="formInspiracao">
-            <Form.Label>Inspiração</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="01"
-              value={inspiracao}
-              onChange={(e) => setInspiracao(Number(e.target.value))}
-            />
-          </Form.Group>
-          <Form.Group controlId="formInspiracaoTotal" className="mt-2">
-            <Form.Control
-              type="number"
-              placeholder="01"
-              value={inspiracaoTotal}
-              disabled
-              readOnly
-            />
-          </Form.Group>
+        <Col xs={12} md={6} className='text-center mb-3'>
+          <SubtituloFicha texto='Inspiração' /> 
+          <Row>
+            <Col xs={6} md={{ span: 4, offset: 2 }}>
+              <Form.Label>Disponivel</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="01"
+                value={inspiracao}
+                onChange={(e) => setInspiracao(Number(e.target.value))}
+              />
+            </Col>
+              {/* Pontos totais de mana */}
+              <Col xs={6} md={4}>
+              <Form.Label>Total</Form.Label>
+              <Form.Control
+                type="number"
+                value={INSPIRACAO_TOTAL}
+                readOnly
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col xs={12} md={6} className='text-center'>
+          <SubtituloFicha texto='Defesa Passiva' />
+          <Row>
+            <Col xs={12} md={12}>
+              <Form.Label>Proteção</Form.Label>
+              <Form.Control
+                type="number"
+                placeholder="10"
+                readOnly
+              />
+            </Col>
+          </Row>
         </Col>
       </Row>
     </>

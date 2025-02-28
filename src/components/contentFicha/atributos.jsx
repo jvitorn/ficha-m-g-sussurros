@@ -189,7 +189,7 @@ export default function ContentFichaAtributos() {
               <Form.Control
                 type="number"
                 value={pontosDisponiveis}
-                disabled
+                readOnly
                 className={pontosDisponiveis < 0 ? 'text-danger' : ''} // Destaca negativo
               />
             </Col>
@@ -200,7 +200,7 @@ export default function ContentFichaAtributos() {
               <Form.Control
                 type="number"
                 value={pontosAtribTotal}
-                disabled
+                readOnly
               />
             </Col>
           </Row>

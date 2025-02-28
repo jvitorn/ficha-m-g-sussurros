@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
+import SubtituloFicha from '../subtituloFicha';
 
 export default function ContentFichaNome() {
   const [nomePersonagem, setNomePersonagem] = useState('');
@@ -11,7 +12,7 @@ export default function ContentFichaNome() {
       <Row className="mb-3">
         <Col md={6}>
           <Form.Group controlId="formNomePersonagem">
-            <Form.Label>Personagem</Form.Label>
+            <SubtituloFicha texto="Nome do Personagem" />
             <Form.Control
               type="text"
               placeholder="Nome do Personagem"
@@ -22,7 +23,7 @@ export default function ContentFichaNome() {
         </Col>
         <Col md={6}>
           <Form.Group controlId="formCorGrimorio">
-            <Form.Label>Cor do Grimório</Form.Label>
+            <SubtituloFicha texto="Cor do Grimório" />
             <Form.Control
               type="text"
               placeholder="Cor do Grimório"

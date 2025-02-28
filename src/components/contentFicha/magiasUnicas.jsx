@@ -1,52 +1,97 @@
 "use client";
 import { useState } from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
+import { Row, Col, Form, Button, Alert } from 'react-bootstrap';
+import { PlusLg } from 'react-bootstrap-icons';
+import SubtituloFicha from '@/components/subtituloFicha';
+import CriarMagiaUnicaModal from '@/components/modals/criarMagiaUnica';
+import ListagemEscolhidaGroup from '@/components/listagemEscolhidaGroup';
 
 export default function ContentFichaMagiasUnicas() {
-  const [nomeMagias, setNomeMagias] = useState('');
-  const [descricao, setDescricao] = useState('');
-  const [descricaoLv, setDescricaoLv] = useState('');
+  // Estados do componente
+  const [showModal, setShowModal] = useState(false);
+  const [magiasCadastradas, setMagiasCadastradas] = useState([]);
+  const [erro, setErro] = useState('');
+
+  // ---------------------------------------------------------------
+  // MANIPULADORES DE EVENTOS
+  // ---------------------------------------------------------------
+
+  const handleSalvarMagia = (novaMagia) => {
+    // Verifica se a magia já foi cadastrada
+    if (magiasCadastradas.some(m => m.nome === novaMagia.nome)) {
+      setErro('Esta magia já foi cadastrada!');
+      return;
+    }
+
+    // Adiciona a nova magia à lista
+    setMagiasCadastradas([...magiasCadastradas, novaMagia]);
+    setShowModal(false);
+    setErro('');
+  };
+
+  const handleRemoverMagia = (id) => {
+    setMagiasCadastradas(magiasCadastradas.filter(m => m.id !== id));
+  };
+
+  const handleUsarNivelMagia = (magiaId, nivel) => {
+    setMagiasCadastradas(prev => prev.map(m =>
+      m.id === magiaId
+        ? {
+            ...m,
+            niveis: m.niveis.map(n =>
+              n.nivel === nivel.nivel
+                ? { ...n, usado: true }
+                : n
+            )
+          }
+        : m
+    ));
+  };
+
+  // ---------------------------------------------------------------
+  // RENDERIZAÇÃO DO COMPONENTE
+  // ---------------------------------------------------------------
 
   return (
     <>
-      {/* Nome e descrição da magia unica */}
+      {/* Botão para abrir o modal de criação */}
       <Row className="mb-3">
-        <Col md={4}>
-          <Form.Group controlId="formNomeMagia">
-            <Form.Label>Nome</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              placeholder="Ex: Canhão de Fogo"
-              value={nomeMagias}
-              onChange={(e) => setNomeMagias(e.target.value)}
-            />
-          </Form.Group>
-        </Col>
-        <Col md={4}>
-          <Form.Group controlId="formDescricaoMagia">
-            <Form.Label>Descrição</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={5}
-              placeholder="Ex: O usuário dispara um canhão de fogo muito poderoso"
-              value={descricao}
-              onChange={(e) => setDescricao(e.target.value)}
-            />
-          </Form.Group>
-        </Col>
-        <Col md={4}>
-          <Form.Group controlId="formDescricaoLv">
-            <Form.Label>Descrição por Level</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Ex: +2"
-              value={descricaoLv}
-              onChange={(e) => setDescricaoLv(e.target.value)}
-            />
-          </Form.Group>
+        <Col xs={12}>
+          <SubtituloFicha texto="Criar Magia" />
+          <Button 
+            variant="outline-primary" 
+            onClick={() => setShowModal(true)}
+          >
+            <PlusLg className="me-2" /> Nova Magia
+          </Button>
         </Col>
       </Row>
+
+      {/* Modal de Criação de Magia */}
+      <CriarMagiaUnicaModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        onSave={handleSalvarMagia}
+      />
+
+      {/* Lista de Magias Cadastradas */}
+      <ListagemEscolhidaGroup
+        titulo="Magias Cadastradas"
+        itens={magiasCadastradas}
+        onRemoverItem={handleRemoverMagia}
+        onUsarNivel={handleUsarNivelMagia}
+        pontosDisponiveis={10} // Defina o valor correto dos pontos disponíveis
+        textoNenhumItem="Nenhuma magia cadastrada."
+      />
+
+      {/* Exibição de Erros */}
+      {erro && (
+        <Row className="mb-3">
+          <Col xs={12}>
+            <Alert variant="danger">{erro}</Alert>
+          </Col>
+        </Row>
+      )}
     </>
   );
 }

@@ -29,7 +29,7 @@ export default function ContentFichaManaHp() {
               <Form.Control
                 type="number"
                 value={manaTotal}
-                disabled
+                readOnly
               />
             </Col>
           </Row>
@@ -53,7 +53,7 @@ export default function ContentFichaManaHp() {
               <Form.Control
                 type="number"
                 value={manaTotal}
-                disabled
+                readOnly
               />
             </Col>
           </Row>
