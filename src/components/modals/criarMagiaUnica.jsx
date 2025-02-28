@@ -1,18 +1,58 @@
 // components/modals/criarMagiaUnica.jsx
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { PlusLg } from 'react-bootstrap-icons';
 
-const CriarMagiaUnicaModal = ({ show, onHide, onSave }) => {
+const CUSTO_MANA_POR_NIVEL = [
+  { nivel: 1, ptUso: 2 },
+  { nivel: 2, ptUso: 4 },
+  { nivel: 3, ptUso: 7 },
+  { nivel: 4, ptUso: 10 },
+  { nivel: 5, ptUso: 13 },
+  { nivel: 6, ptUso: 16 },
+  { nivel: 7, ptUso: 20 },
+  { nivel: 8, ptUso: 25 }
+];
+
+const NIVEL_MAXIMO = 8;
+
+const CriarMagiaUnicaModal = ({ show, onHide, onSave, magiaParaEditar }) => {
   const [nomeMagia, setNomeMagia] = useState('');
   const [descricaoGeral, setDescricaoGeral] = useState('');
   const [niveis, setNiveis] = useState([]);
   const [proximoNivel, setProximoNivel] = useState(2);
+  const [erro, setErro] = useState('');
+
+  // Preenche os campos se estiver editando
+  useEffect(() => {
+    if (magiaParaEditar) {
+      setNomeMagia(magiaParaEditar.nome);
+      setDescricaoGeral(magiaParaEditar.descricao);
+      setNiveis(magiaParaEditar.niveis);
+      setProximoNivel(magiaParaEditar.niveis.length + 1);
+    } else {
+      resetCampos();
+    }
+  }, [magiaParaEditar]);
 
   const handleAdicionarNivel = () => {
-    setNiveis([...niveis, { nivel: proximoNivel, descricao: '', usado: false }]);
+    if (proximoNivel > NIVEL_MAXIMO) {
+      setErro(`Nível máximo permitido é ${NIVEL_MAXIMO}`);
+      return;
+    }
+
+    const custoNivel = CUSTO_MANA_POR_NIVEL.find(n => n.nivel === proximoNivel)?.ptUso || 0;
+    
+    setNiveis([...niveis, { 
+      nivel: proximoNivel, 
+      descricao: '',
+      ptUso: custoNivel,
+      usado: false 
+    }]);
+    
     setProximoNivel(prev => prev + 1);
+    setErro('');
   };
 
   const handleChangeNivel = (index, valor) => {
@@ -23,13 +63,13 @@ const CriarMagiaUnicaModal = ({ show, onHide, onSave }) => {
 
   const handleSalvar = () => {
     const novaMagia = {
-      id: Date.now().toString(), // Gera um ID único
+      id: magiaParaEditar ? magiaParaEditar.id : Date.now().toString(),
       nome: nomeMagia,
       descricao: descricaoGeral,
       niveis: niveis
     };
 
-    onSave(novaMagia); // Passa a nova magia para o componente pai
+    onSave(novaMagia);
     resetCampos();
   };
 
@@ -38,12 +78,13 @@ const CriarMagiaUnicaModal = ({ show, onHide, onSave }) => {
     setDescricaoGeral('');
     setNiveis([]);
     setProximoNivel(2);
+    setErro('');
   };
 
   return (
     <Modal show={show} onHide={onHide} size="lg">
       <Modal.Header closeButton>
-        <Modal.Title>Criar Nova Magia</Modal.Title>
+        <Modal.Title>{magiaParaEditar ? 'Editar Magia' : 'Criar Nova Magia'}</Modal.Title>
       </Modal.Header>
       
       <Modal.Body>
@@ -70,31 +111,44 @@ const CriarMagiaUnicaModal = ({ show, onHide, onSave }) => {
           </Form.Group>
 
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h5>Níveis da Magia</h5>
+            <div>
+              <h5 className="mb-0">Níveis da Magia</h5>
+              <small className="text-muted">Máximo: nível {NIVEL_MAXIMO}</small>
+            </div>
             <Button 
               variant="outline-success" 
               size="sm"
               onClick={handleAdicionarNivel}
-              disabled={!nomeMagia || !descricaoGeral}
+              disabled={!nomeMagia || !descricaoGeral || proximoNivel > NIVEL_MAXIMO}
             >
               <PlusLg className="me-1" /> Adicionar Nível
             </Button>
           </div>
 
-          {niveis.map((nivel, index) => (
-            <div key={index} className="mb-3 p-3 border rounded">
-              <Form.Group controlId={`formNivel${index}`}>
-                <Form.Label>Nível {nivel.nivel}</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={2}
-                  placeholder={`Descrição do nível ${nivel.nivel}...`}
-                  value={nivel.descricao}
-                  onChange={(e) => handleChangeNivel(index, e.target.value)}
-                />
-              </Form.Group>
-            </div>
-          ))}
+          {erro && <Alert variant="danger" className="mb-3">{erro}</Alert>}
+
+          {niveis.map((nivel, index) => {
+            const custoNivel = CUSTO_MANA_POR_NIVEL.find(n => n.nivel === nivel.nivel)?.ptUso || 0;
+            
+            return (
+              <div key={index} className="mb-3 p-3 border rounded">
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <Form.Label>Nível {nivel.nivel}</Form.Label>
+                  <small className="text-muted">Custo: {custoNivel} MB</small>
+                </div>
+                
+                <Form.Group controlId={`formNivel${index}`}>
+                  <Form.Control
+                    as="textarea"
+                    rows={2}
+                    placeholder={`Descrição do nível ${nivel.nivel}...`}
+                    value={nivel.descricao}
+                    onChange={(e) => handleChangeNivel(index, e.target.value)}
+                  />
+                </Form.Group>
+              </div>
+            );
+          })}
         </Form>
       </Modal.Body>
 
@@ -107,7 +161,7 @@ const CriarMagiaUnicaModal = ({ show, onHide, onSave }) => {
           onClick={handleSalvar}
           disabled={!nomeMagia || !descricaoGeral || niveis.length === 0}
         >
-          Salvar Magia
+          {magiaParaEditar ? 'Salvar Alterações' : 'Salvar Magia'}
         </Button>
       </Modal.Footer>
     </Modal>
