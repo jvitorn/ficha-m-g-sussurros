@@ -36,4 +36,12 @@ export const UserSchema = z.object({
       path: ["username"]
     });
   }
+  // Validação customizada melhorada
+  if (data.username !== data.username.toLowerCase()) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Nome de usuário deve ser em minúsculas",
+      path: ["username"]
+    });
+  }
 });

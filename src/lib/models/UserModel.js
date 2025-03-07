@@ -1,5 +1,5 @@
 import { UserSchema } from '@/lib/schemas/userSchema';
-import { BasicModel } from '@/lib/models/BasicModal';
+import { BasicModel } from '@/lib/models/BasicModel';
 
 export class UserModel extends BasicModel {
   constructor() {

@@ -1,5 +1,5 @@
 // UserService.js
-import { UserModel } from '@/lib/models/UserModal';
+import { UserModel } from '@/lib/models/UserModel';
 
 export class UserService {
   constructor() {

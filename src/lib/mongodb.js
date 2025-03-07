@@ -1,27 +1,31 @@
+// src/lib/mongodb.js
 import { MongoClient } from 'mongodb';
 
-const client = new MongoClient(process.env.MONGODB_URI, {
-  serverApi: {
-    version: '1',
-    strict: true,
-    deprecationErrors: true,
-  },
-  tls: true, // ← Adicione isso
-  tlsAllowInvalidCertificates: false, // ← Mantenha false para produção
-});
-
+let client = null;
 let cachedDb = null;
 
 export async function connectToDatabase() {
   if (cachedDb) return cachedDb;
-  
+
+  client = new MongoClient(process.env.MONGODB_URI, {
+    serverSelectionTimeoutMS: 1000,
+    socketTimeoutMS: 1000,
+  });
+
   try {
     await client.connect();
-    const db = client.db(process.env.MONGODB_DBNAME);
-    cachedDb = db;
-    return db;
+    cachedDb = client.db(process.env.MONGODB_DBNAME);
+    return cachedDb;
   } catch (error) {
-    console.error('Erro detalhado:', error);
-    throw new Error('Falha ao conectar ao banco de dados');
+    throw new Error('Falha na conexão com o banco de dados');
+  }
+}
+
+// Novo método para fechar conexões
+export async function closeConnection() {
+  if (client) {
+    await client.close();
+    client = null;
+    cachedDb = null;
   }
 }

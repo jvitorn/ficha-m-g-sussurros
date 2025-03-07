@@ -6,19 +6,25 @@ import { connectToDatabase } from '@/lib/mongodb';
 export async function GET() {
   try {
     const db = await connectToDatabase();
-    await db.command({ ping: 1 }); // Testa a conexão
+    await db.command({ ping: 1 });
     
     return NextResponse.json({
       status: 'online',
       database: 'connected',
       timestamp: new Date().toISOString()
     });
+    
   } catch (error) {
     return NextResponse.json({
       status: 'degraded',
       database: 'disconnected',
       error: error.message,
       timestamp: new Date().toISOString()
-    }, { status: 503 });
+    }, { 
+      status: 503,
+      headers: {
+        'Connection': 'close' // Força fechar conexão
+      }
+    });
   }
 }
