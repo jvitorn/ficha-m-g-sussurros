@@ -6,12 +6,21 @@ import SubtituloFicha from '@/components/subtituloFicha';
 
 const RACA_LIST = [
   { id:1, nome: "Humano",descricao:'aqui é a raça humana', bonus:[], desvantagem:[]},
-  { id:2, nome: "Elfo"}
+  { id:2, nome: "Elfo"},
+  { id:3, nome:"Lumis"},
+  { id:4, nome: "Ignar"},
+  { id:5, nome: "Floresto"},
+  { id:6, nome: "Nebulari"},
+  { id:7, nome: "Draconiano"},
+  { id:8, nome: "Espectral"}
 ]
 
-const  CLASSE_LIST = [
-  { id:1, nome:'Suporte'},
-  { id:1, nome:'Longo'}
+const CLASSE_LIST = [
+  { id: 1, nome:'Suporte'},
+  { id: 2, nome:'Longo'},
+  { id:-3, nome:'Criação'},
+  { id: 4, nome: 'Corpo a Corpo'},
+  { id: 5, nome:'Especialista'}
 ]
 
 export default function ContentFichaClasse() {
