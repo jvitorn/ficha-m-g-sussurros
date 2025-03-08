@@ -1,65 +1,45 @@
 'use client';
 
+import '@/app/styles/global.css';
 import Head from 'next/head';
-import { Container, Button } from 'react-bootstrap';
-import { FichaProvider } from '@/context/fichaContext';
+import { Col, Container, Row, Nav } from 'react-bootstrap';
 
-import DynamicAccordion from '@/components/DynamicAccordion';
-import accordionItemsFicha from '@/data/accordionItems';
-
-export default function FichaRPG() {
-  // Variáveis de exemplo (substitua conforme sua lógica)
-  const nomePersonagem = 'Exemplo';
-  const corPersonagem = 'Azul';
-  const mana = 100;
-  const nivel = 1;
-  const pontosAtrib = 0;
-  const magiaNome = '';
-  const magiaEfeito = '';
-  const raca = '';
-  const subclasses = '';
-  const resFisica = '';
-  const resMagica = '';
-  const pericias = [];
-
-  // Função chamada ao clicar em "Atualizar" ou "Enviar" ficha
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Dados da ficha:', {
-      nomePersonagem,
-      corPersonagem,
-      mana,
-      nivel,
-      pontosAtrib,
-      magiaNome,
-      magiaEfeito,
-      raca,
-      subclasses,
-      resFisica,
-      resMagica,
-      pericias,
-    });
-    alert('Ficha atualizada com sucesso!');
-  };
-
+export default function Home() {
   return (
     <>
       <Head>
-        <title>Ficha Sussurros do Dragão</title>
+        <title>Bem Vindo a Magos & Grimorios</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-
-      <Container className="my-4">
-        <h2 className="mb-3">Sussurros do Dragão | Ficha de Personagem</h2>
-
-        <FichaProvider>
-          <form onSubmit={handleSubmit}>
-            <DynamicAccordion items={accordionItemsFicha} />
-            <Button type="submit" variant="primary" className="mt-3">
-              Enviar Ficha
-            </Button>
-          </form>
-        </FichaProvider>
+      <Container fluid className="background-container vh-100 d-flex align-items-center justify-content-center">
+        <Row className="justify-content-center w-100">
+          <Col md={6} className='zelda-menu'>
+            <Row>
+              <Col md={12}>
+                <h1 className='display-2 fw-bold fontLogoBold text-center text-gold mb-4 zelda-title'>
+                  Magos & Grimorios
+                </h1>
+                <h5 className='fs-3 fontLogoThin text-center mb-5 text-white'>
+                  Seu sistema de RPG, agora na Web
+                </h5>
+                <Nav className="flex-column text-center fs-4">
+                  <Nav.Link href="/home" className="zelda-nav-link">
+                    Login
+                  </Nav.Link>
+                  <Nav.Link eventKey="link-1" className="zelda-nav-link">
+                    Contato
+                  </Nav.Link>
+                  <Nav.Link eventKey="link-2" className="zelda-nav-link">
+                    Sobre
+                  </Nav.Link>
+                  <Nav.Link eventKey="disabled" disabled className="zelda-nav-link">
+                    Em Breve
+                  </Nav.Link>
+                </Nav>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       </Container>
     </>
   );

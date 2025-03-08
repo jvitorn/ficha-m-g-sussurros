@@ -1,0 +1,145 @@
+/* src/app/styles/globals.css */
+:root {
+  --font-big-shoulders-stencil: 'Big Shoulders Stencil Text', sans-serif;
+  --text-gold: #D99E32;
+}
+
+/* Fontes personalizadas */
+.fontLogo {
+  font-family: var(--font-big-shoulders-stencil);
+  font-weight: 400; /* Regular */
+}
+
+.fontLogoMedium {
+  font-family: var(--font-big-shoulders-stencil);
+  font-weight: 500; /* Medium */
+}
+
+.fontLogoBold {
+  font-family: var(--font-big-shoulders-stencil);
+  font-weight: 700; /* Bold */
+}
+
+.fontLogoThin {
+  font-family: var(--font-big-shoulders-stencil);
+  font-weight: 100; /* Thin */
+}
+
+/* Estilo do container de fundo */
+.background-container {
+  background-image: url('/images/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Ajustes para telas menores */
+@media (max-width: 768px) {
+  .background-container {
+    background-position: top center;
+    padding: 10px;
+  }
+
+  .zelda-menu {
+    width: 100%;
+    margin: 0 10px;
+    padding: 15px;
+  }
+
+  .zelda-title {
+    font-size: 2rem;
+  }
+
+  .zelda-nav-link {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .background-container {
+    background-position: 25% center;
+  }
+
+  .zelda-menu {
+    padding: 10px;
+  }
+
+  .zelda-title {
+    font-size: 1.5rem;
+  }
+
+  .zelda-nav-link {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Estilo do menu no tema Zelda */
+.zelda-menu {
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid var(--text-gold);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  font-family: var(--font-big-shoulders-stencil);
+  max-width: 600px;
+  width: 90%;
+  margin: 0 auto;
+}
+
+/* Links do menu estilo Zelda */
+.zelda-nav-link {
+  display: block;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0.7);
+  border: 2px solid var(--text-gold);
+  padding: 0.75rem 1.5rem;
+  text-align: center;
+  text-decoration: none;
+  color: var(--text-gold) !important;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+}
+
+.zelda-nav-link:hover {
+  background-color: #444;
+  color: #fff !important;
+  transform: scale(1.05);
+  letter-spacing: 3px;
+}
+
+/* Estilo para links desabilitados */
+.zelda-nav-link.disabled {
+  color: #666 !important;
+  cursor: not-allowed;
+}
+
+.zelda-nav-link.disabled:hover {
+  text-shadow: none;
+  transform: none;
+}
+
+/* Texto dourado com brilho */
+.text-gold {
+  color: var(--text-gold);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+/* Animação de brilho para o título */
+@keyframes glow {
+  0% { text-shadow: 0 0 10px var(--text-gold); }
+  50% { text-shadow: 0 0 20px var(--text-gold), 0 0 10px var(--text-gold); }
+  100% { text-shadow: 0 0 10px var(--text-gold); }
+}
+
+.zelda-title {
+  animation: glow 2s infinite;
+}
