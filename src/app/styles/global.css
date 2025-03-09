@@ -2,9 +2,22 @@
 :root {
   --font-big-shoulders-stencil: 'Big Shoulders Stencil Text', sans-serif;
   --text-gold: #D99E32;
+  --color-brown-logo: #733b0a;
+  --color-gold-logo:#d99e32;
 }
 
 /* Fontes personalizadas */
+.bg-brown {
+  background-color: var(--color-brown-logo) !important;
+}
+.bg-gold {
+  background-color: var(--color-gold-logo) !important;
+}
+.text-brown {
+  font-family: var(--font-big-shoulders-stencil);
+  color: var(--color-brown-logo) !important;
+}
+
 .fontLogo {
   font-family: var(--font-big-shoulders-stencil);
   font-weight: 400; /* Regular */
@@ -27,7 +40,7 @@
 
 /* Estilo do container de fundo */
 .background-container {
-  background-image: url('/images/background.jpg');
+  background-image: url('/images/background/background.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -131,6 +144,12 @@
 .text-gold {
   color: var(--text-gold);
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+.text-brown {
+  font-family: var(--font-big-shoulders-stencil);
+  color: var(--color-brown-logo) !important;
+
+  text-shadow: 0 0 10px var(--color-brown-logo);
 }
 
 /* Animação de brilho para o título */

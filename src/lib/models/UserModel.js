@@ -18,4 +18,10 @@ export class UserModel extends BasicModel {
     const collection = await this.getCollection();
     return collection.findOne({ email });
   }
+
+  // Métodos específicos para UserModel (se necessário)
+  async findUserByUsername(username) {
+    const collection = await this.getCollection();
+    return collection.findOne({ username });
+  }
 }

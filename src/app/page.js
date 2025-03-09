@@ -23,7 +23,7 @@ export default function Home() {
                   Seu sistema de RPG, agora na Web
                 </h5>
                 <Nav className="flex-column text-center fs-4">
-                  <Nav.Link href="/home" className="zelda-nav-link">
+                  <Nav.Link href="/login" className="zelda-nav-link">
                     Login
                   </Nav.Link>
                   <Nav.Link eventKey="link-1" className="zelda-nav-link">
