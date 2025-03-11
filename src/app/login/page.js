@@ -3,6 +3,9 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
+import { useLoading } from '@/context/loadingContext';
+
+
 import '@/app/styles/global.css';
 import '@/app/styles/login.css';
 
@@ -12,10 +15,13 @@ import { Container, Row, Col, Form, FloatingLabel, Button } from 'react-bootstra
 // Icons
 import LoginIcon from '@mui/icons-material/Login';
 
+import Loader from '@/components/Loader';
+
 export default function Login() {
   const router = useRouter();
   const [serverError, setServerError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { loading, startLoading, stopLoading } = useLoading();
 
   const {
     register,
@@ -25,6 +31,7 @@ export default function Login() {
 
   const onSubmit = async (data) => {
     try {
+      startLoading();
       setIsSubmitting(true);
       setServerError('');
 
@@ -50,10 +57,16 @@ export default function Login() {
 
     } catch (error) {
       setServerError(error.message);
+      stopLoading();
     } finally {
       setIsSubmitting(false);
+      stopLoading();
     }
   };
+
+  if (loading) {
+    return <Loader message="Autenticando..." />;
+  }
 
   return (
     <>

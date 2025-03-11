@@ -1,0 +1,42 @@
+.fontLine {
+    font-weight: 200;
+    line-height: 0.5;
+    font-size: calc(0.75rem + 2vw);
+}
+
+.line {
+    font-weight: 200;
+    line-height: 0.5; 
+}
+.card-title.display-6 {
+    font-weight: 400;
+}
+
+.folder-card {
+    position: relative;
+    background-color: #6a75ca; /* Cor de fundo da pasta */
+    border-radius: 12px;
+    width: 180px;        /* Ajuste conforme sua necessidade */
+    min-height: 130px;   /* Ajuste conforme sua necessidade */
+    border: none;        /* Removendo borda extra */
+    padding: 1.5rem;
+    color: #fff;         /* Texto branco para contrastar */
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+
+  /* Efeito ao passar o mouse */
+  .folder-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  /* “Abinha” da pasta */
+  .folder-tab {
+    position: absolute;
+    top: -12px;
+    left: 0px;
+    width: 60px;
+    height: 24px;
+    background-color: #6a75ca;
+    border-radius: 8px 8px 0 0;
+  }

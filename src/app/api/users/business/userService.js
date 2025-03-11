@@ -26,7 +26,7 @@ export class UserService {
       
       return this.generateToken(user);
     } catch (error) {
-      throw new Error(`Authentication failed: ${error.message}`);
+      throw new Error(`Falha na authenticação: ${error.message}`);
     }
   }
 

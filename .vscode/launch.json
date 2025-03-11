@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Next.js API",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "node",
+        "args": ["./node_modules/next/dist/bin/next", "dev"],
+        "console": "integratedTerminal",
+        "autoAttachChildProcesses": true
+      }
+    ]
+  }
+  
