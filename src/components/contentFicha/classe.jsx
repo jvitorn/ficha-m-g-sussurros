@@ -1,132 +1,22 @@
 "use client";
 import { useState } from "react";
 import { Row, Col, Form } from "react-bootstrap";
+// Contexto para gerenciamento de estado global dos atributos
+import { useFicha } from "@/context/fichaContext";
 // Componente customizado de subtítulo
 import SubtituloFicha from "@/components/subtituloFicha";
 
-const RACA_LIST = [
-  {
-    id: 1,
-    nome: "Humano",
-    habilidade:"ser humano",
-    descricao: "aqui é a raça humana",
-    vantagens: "sem vantagem",
-    desvantagens: "Vida normal, sem buff",
-  },
-  { 
-    id: 2, 
-    nome: "Elfo",
-    habilidade:"Libelula",
-    descricao: "Aqui sao os elfos",
-    vantagens: "muita mana",
-    desvantagens: "Pouca vida" 
-  },
-  { id: 3, nome: "Lumis" },
-  { id: 4, nome: "Ignar" },
-  { id: 5, nome: "Floresto" },
-  { id: 6, nome: "Nebulari" },
-  { id: 7, nome: "Draconiano" },
-  { id: 8, nome: "Espectral" },
-];
-
-const CLASSE_LIST = [
-  { 
-    id: 1, 
-    nome: "Suporte",
-    formulas: [
-      {
-        name:"HP", 
-        estrutura: "10 + (CM x 2) + Nivel x 6",
-      },
-    ]
-  },
-  { id: 2, nome: "Longo" },
-  { id: -3, nome: "Criação" },
-  { id: 4, nome: "Corpo a Corpo" },
-  { id: 5, nome: "Especialista" },
-];
-
-const SUBCLASSE_LIST = [
-  {
-    id: 1,
-    nome: "Mestre das Maldições",
-    classe: { id: 1, nome: "Suporte" },
-    descricao:
-      "Especialista em lançar maldições e debuffs nos inimigos, enfraquecendo-os e tornando-os mais vulneráveis",
-    vantagens: "facilidade em criar magias de controle",
-    desvantagens: "pouca vida",
-  },
-  {
-    id: 2,
-    nome: "Ritualista Místico",
-    classe: { id: 1, nome: "Suporte" },
-    descricao:
-      "Especialista em realizar rituais mágicos que podem alterar o curso de uma batalha.",
-    vantagens: "facilidade em criar magias com debuff",
-    desvantagens: "pouca vida",
-  },
-  {
-    id: 3,
-    nome: "Mestre da Cura",
-    classe: { id: 1, nome: "Suporte" },
-    descricao:
-      "Especialista em curar feridas e restaurar a mana dos aliados, com feitiços poderosos de regeneração.",
-    vantagens: "facilidade em criar de cura e mana",
-    desvantagens: "pouca vida",
-  },
-  {
-    id: 4,
-    nome: "Lutador Mágico",
-    classe: { id: 2, nome: "Corpo a Corpo" },
-    descricao:
-      "Combina habilidades de combate corpo a corpo com feitiços que aumentam sua força e resistência durante o combate",
-    vantagens: "facilidade em criar de cura e mana",
-    desvantagens: "pouca vida",
-  },
-  {
-    id: 5,
-    nome: "Mestre das Armaduras",
-    classe: { id: 2, nome: "Corpo a Corpo" },
-    descricao:
-      "Especialista em conjurar armaduras mágicas que oferecem defesas únicas e poderosas, tornando-o um verdadeiro tanque em batalha.",
-    vantagens: "facilidade em criar de cura e mana",
-    desvantagens: "pouca vida",
-  },
-  {
-    id: 6,
-    nome: "Assassino Mágico",
-    classe: { id: 2, nome: "Corpo a Corpo" },
-    descricao:
-      "Combina agilidade e precisão com feitiços letais, capaz de infligir danos devastadores em curtos períodos de tempo.",
-    vantagens: "facilidade em criar de cura e mana",
-    desvantagens: "pouca vida",
-  },
-  {
-    id: 7,
-    nome: "Arqueiro Mágico",
-    classe: { id: 3, nome: "Longo Alcance" },
-    descricao:
-      "Especialista em lançar projéteis mágicos com alta precisão, causando danos significativos aos inimigos à distância.",
-    vantagens: "facilidade em criar de cura e mana",
-    desvantagens: "pouca vida",
-  },
-  {
-    id: 7,
-    nome: "Necromante",
-    classe: { id: 3, nome: "Longo Alcance" },
-    descricao:
-      "Especialista em manipular as forças da vida e da morte, utilizando magias sombrias para drenar a vitalidade dos inimigos e alterar o curso da batalha a seu favor.",
-    vantagens: "facilidade em criar de cura e mana",
-    desvantagens: "pouca vida",
-  },
-];
 
 export default function ContentFichaClasse() {
-  const [raca, setRaca] = useState("");
-  const [subclasses, setSubclasses] = useState("");
-  const [resFisica, setResFisica] = useState("");
-  const [racaSelecionado, setRacaSelecionado] = useState("");
-  const [subclasseSelecionado, setSubclasseSelecionado] = useState("");
+  // Busca os dados e funções do contexto de atributos
+  const {
+    RACA_LIST,
+    CLASSE_LIST,
+    SUBCLASSE_LIST,
+    classeSelecionada,setClasseSelecionada,
+    racaSelecionada, setRacaSelecionada,
+    subclasseSelecionada, setSubclasseSelecionada,
+  } = useFicha();
 
   // ---------------------------------------------------------------
   // MANIPULADORES DE EVENTOS
@@ -137,19 +27,35 @@ export default function ContentFichaClasse() {
    * @param {Event} event - Evento de mudança do select
    */
   const handleSelectRaca = (event) => {
-    console.log('Handle de raça',event.target.value)
-    const racaSelected = RACA_LIST.find((n) => n.id == event.target.value);
-    console.log('Raça Selected',racaSelected)
-    setRaca(racaSelected)
+    const raca = RACA_LIST.find(r => r.id == event.target.value);
+    setRacaSelecionada(raca || null);
   };
-   /**
+  /**
+   * Manipula a seleção de subclasse no dropdown
+   * @param {Event} event - Evento de mudança do select
+   */
+  const handleSelectClasse = (event) => {
+    const id = parseInt(event.target.value); // Converter para número
+    const classe = CLASSE_LIST.find(c => c.id === id);
+    
+    // if(classe?.formulas) { // Verificar existência de fórmulas
+    //   const hpFormula = classe.formulas.find(f => f.name === "HP");
+    //   const manaFormula = classe.formulas.find(f => f.name === "MP");
+      
+    //   if(hpFormula) setHpTotal(calcularFormulasClasse(hpFormula));
+    //   if(manaFormula) setMana(calcularFormulasClasse(manaFormula));
+    // }
+    
+    setClasseSelecionada(classe || null);
+  };
+  /**
    * Manipula a seleção de subclasse no dropdown
    * @param {Event} event - Evento de mudança do select
    */
   const handleSelectSubClasse = (event) => {
-    const subClasseSelected = SUBCLASSE_LIST.find((s)=>s.id == event.target.value)
-    setSubclasseSelecionado(subClasseSelected)
-  }
+    const subclasse = SUBCLASSE_LIST.find(s => s.id == event.target.value);
+    setSubclasseSelecionada(subclasse || null);
+  };
 
   // ---------------------------------------------------------------
   // RENDERIZAÇÃO DO COMPONENTE
@@ -165,10 +71,11 @@ export default function ContentFichaClasse() {
             <Col xs={12} md={12}>
               <SubtituloFicha texto="Raça" />
               <Form.Select
-                value={raca}
+                value={racaSelecionada?.id || ""} // Usar apenas o ID como valor
                 onChange={handleSelectRaca}
                 className="mb-3"
               >
+                <option value="">Selecione uma Raça</option>
                 {RACA_LIST.map(({ id, nome }) => (
                   <option key={id} value={id}>
                     {nome}
@@ -179,14 +86,14 @@ export default function ContentFichaClasse() {
               <Form.Label>Habilidade</Form.Label>
               <Form.Control
                 type="text"
-                value={raca?.habilidade || ""}
+                value={racaSelecionada?.habilidade || ""}
                 readOnly
               />
               <Form.Label>Descrição Geral</Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
-                value={raca?.descricao || ""}
+                value={racaSelecionada?.descricao || ""}
                 readOnly
               />
               <Row>
@@ -195,7 +102,7 @@ export default function ContentFichaClasse() {
                   <Form.Control
                     as="textarea"
                     rows={2}
-                    value={raca?.vantagens || ""}
+                    value={racaSelecionada?.vantagens || ""}
                     readOnly
                   />
                 </Col>
@@ -204,7 +111,7 @@ export default function ContentFichaClasse() {
                   <Form.Control
                     as="textarea"
                     rows={2}
-                    value={raca?.desvantagens || ""}
+                    value={racaSelecionada?.desvantagens || ""}
                     readOnly
                   />
                 </Col>
@@ -215,10 +122,11 @@ export default function ContentFichaClasse() {
         <Col xs={12} md={6}>
           <SubtituloFicha texto="Classe" />
           <Form.Select
-            value={racaSelecionado}
-            onChange={handleSelectRaca}
+            value={classeSelecionada?.id || ""}
+            onChange={handleSelectClasse}
             className="mb-3"
           >
+            <option value="">Selecione uma Classe</option>
             {CLASSE_LIST.map(({ id, nome }) => (
               <option key={id} value={id}>
                 {nome}
@@ -227,10 +135,11 @@ export default function ContentFichaClasse() {
           </Form.Select>
           <SubtituloFicha texto="SubClasse" />
           <Form.Select
-            value={subclasseSelecionado}
+            value={subclasseSelecionada?.id || ""}
             onChange={handleSelectSubClasse}
             className="mb-3"
           >
+            <option value="">Selecione uma Sub Classe</option>
             {SUBCLASSE_LIST.map(({ id, nome }) => (
               <option key={id} value={id}>
                 {nome}
@@ -241,7 +150,7 @@ export default function ContentFichaClasse() {
           <Form.Control
             as="textarea"
             rows={3}
-            value={subclasseSelecionado?.descricao || ""}
+            value={subclasseSelecionada?.descricao || ""}
             readOnly
           />
           <Row className="mt-3">
@@ -250,7 +159,7 @@ export default function ContentFichaClasse() {
               <Form.Control
                 as="textarea"
                 rows={2}
-                value={subclasseSelecionado?.vantagens || ""}
+                value={subclasseSelecionada?.vantagens || ""}
                 readOnly
               />
             </Col>
@@ -259,7 +168,7 @@ export default function ContentFichaClasse() {
               <Form.Control
                 as="textarea"
                 rows={2}
-                value={subclasseSelecionado?.desvantagens || ""}
+                value={subclasseSelecionada?.desvantagens || ""}
                 readOnly
               />
             </Col>

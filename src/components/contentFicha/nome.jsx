@@ -1,10 +1,17 @@
 "use client";
 import { useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
+// Contexto para gerenciamento de estado global dos atributos
+import { useFicha } from "@/context/fichaContext";
+
 import SubtituloFicha from '../subtituloFicha';
 
 export default function ContentFichaNome() {
-  const [nomePersonagem, setNomePersonagem] = useState('');
+ 
+  const {
+    nomePersonagem, setNomePersonagem
+  } = useFicha();
+
   const [corGrimorio, setCorGrimorio] = useState('');
 
   return (
@@ -16,7 +23,7 @@ export default function ContentFichaNome() {
             <Form.Control
               type="text"
               placeholder="Nome do Personagem"
-              value={nomePersonagem}
+              value={nomePersonagem || ''}
               onChange={(e) => setNomePersonagem(e.target.value)}
             />
           </Form.Group>
@@ -27,7 +34,7 @@ export default function ContentFichaNome() {
             <Form.Control
               type="text"
               placeholder="Cor do Grimório"
-              value={corGrimorio}
+              value={corGrimorio || ''}
               onChange={(e) => setCorGrimorio(e.target.value)}
             />
           </Form.Group>

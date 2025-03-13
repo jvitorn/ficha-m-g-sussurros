@@ -1,12 +1,18 @@
 "use client";
 import { useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
+// Contexto para gerenciamento de estado global dos atributos
+import { useFicha } from "@/context/fichaContext";
 // Componente customizado de subtítulo
 import SubtituloFicha from '@/components/subtituloFicha';
 
 const INSPIRACAO_TOTAL = 3;
 
 export default function ContentFichaInspiracaoDefesa() {
+  const {
+    defesaPassiva
+  } = useFicha();
+
   const [inspiracao, setInspiracao] = useState(0);
 
   return (
@@ -43,7 +49,8 @@ export default function ContentFichaInspiracaoDefesa() {
               <Form.Label>Proteção</Form.Label>
               <Form.Control
                 type="number"
-                placeholder="10"
+                value={defesaPassiva}
+                disabled
                 readOnly
               />
             </Col>

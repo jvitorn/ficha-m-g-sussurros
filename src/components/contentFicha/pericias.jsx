@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { Table, Form, Row, Col } from 'react-bootstrap';
-import { useAtributos } from '@/context/fichaContext';
+import { useFicha } from '@/context/fichaContext';
 
 export default function ContentFichaPericias() {
-  const { atributos } = useAtributos();
+  const { atributos } = useFicha();
 
   const [pericias, setPericias] = useState([
     { nome: 'Arcana', atributo: 'PM', bonus: '', valor: 0, ativo: false },

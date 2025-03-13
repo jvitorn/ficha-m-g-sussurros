@@ -1,6 +1,7 @@
 "use client";
 import { useState } from 'react';
 import { Row, Col, Form, Button, ListGroup, Alert } from 'react-bootstrap';
+import clsx from 'clsx';
 // Componente customizado de subtítulo
 import SubtituloFicha from '@/components/subtituloFicha';
 import ListagemEscolhidaGroup from '@/components/listagemEscolhidaGroup';
@@ -226,7 +227,8 @@ export default function ContentFichaHabilidadesMagicas() {
                 type="number"
                 value={ptDisponiveis}
                 onChange={(e) => setPtDisponiveis(Number(e.target.value))}
-                className={ptDisponiveis < 0 ? 'text-danger' : ''}
+                className={clsx({'text-danger' : ptDisponiveis < 0})}
+
               />
             </Col>
             <Col xs={6} md={4}>

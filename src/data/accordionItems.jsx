@@ -9,10 +9,11 @@ import ContentFichaClasse from "@/components/contentFicha/classe";
 import ContentFichaMagiasUnicas from "@/components/contentFicha/magiasUnicas";
 import ContentFichaHabilidadesMagicas from "@/components/contentFicha/habilidadeUnica";
 import ContentFichaInspiracaoDefesa from "@/components/contentFicha/inspiracaoDefesa";
+import ContentFichaMagiasComuns from "@/components/contentFicha/magiasComuns";
 
 const accordionItemsFicha = [
   {
-    title: "Nome do Personagem e Cor do Grimório *",
+    title: "Nome do Personagem e Cor do Grimório",
     content: <ContentFichaNome />,
   },
   {
@@ -24,23 +25,27 @@ const accordionItemsFicha = [
     content: <ContentFichaClasse />,
   },
   {
-    title: "Mana e HP *",
+    title: "Mana e HP",
     content: <ContentFichaManaHp />,
   },
   {
-    title: "Perícias *",
+    title: "Perícias",
     content: <ContentFichaPericias />,
+  },
+  {
+    title: "Mágias Comuns",
+    content: <ContentFichaMagiasComuns />,
   },
   {
     title: "Mágias Únicas",
     content: <ContentFichaMagiasUnicas />,
   },
   {
-    title: "Habilidades Mágicas *",
+    title: "Habilidades Mágicas",
     content: <ContentFichaHabilidadesMagicas />,
   },
   {
-    title: "Inspiração e Defesa *",
+    title: "Inspiração e Defesa",
     content: <ContentFichaInspiracaoDefesa />,
   },
 ];

@@ -1,28 +1,31 @@
 "use client";
 // Hooks do React
-import { useState, useMemo } from 'react';
+import { useState, useMemo } from "react";
 // Componentes do React Bootstrap
-import { Row, Col, Form, Alert, Button, Modal } from 'react-bootstrap';
+import { Row, Col, Form, Alert, Button, Modal } from "react-bootstrap";
+import clsx from "clsx";
 // Contexto para gerenciamento de estado global dos atributos
-import { useAtributos } from '@/context/fichaContext';
+import { useFicha } from "@/context/fichaContext";
 // Componente customizado de subtítulo
-import SubtituloFicha from '@/components/subtituloFicha';
-
-
+import SubtituloFicha from "@/components/subtituloFicha";
 
 export default function ContentFichaAtributos() {
   // Busca os dados e funções do contexto de atributos
   const {
-    atributos,          // Lista de atributos do personagem
-    atualizarAtributo,  // Função para atualizar um atributo
-    resetAtributos,     // Função para resetar todos os atributos
-    NIVEL_LIST          // Lista de níveis disponíveis
-  } = useAtributos();
+    atributos, // Lista de atributos do personagem
+    atualizarAtributo, // Função para atualizar um atributo
+    resetAtributos, // Função para resetar todos os atributos
+    NIVEL_LIST, // Lista de níveis disponíveis
+    nivelSelecionado,
+    setNivelSelecionado,
+  } = useFicha();
 
   // Estados locais do componente
-  const [nivelSelecionado, setNivelSelecionado] = useState(NIVEL_LIST[0].id); // ID do nível atual
-  const [pontosAtribTotal, setPontosAtribTotal] = useState(NIVEL_LIST[0].pontosAtribuicao); // Pontos totais do nível
-  const [erro, setErro] = useState(''); // Mensagens de erro
+
+  const [pontosAtribTotal, setPontosAtribTotal] = useState(
+    NIVEL_LIST[0].pontosAtribuicao
+  ); // Pontos totais do nível
+  const [erro, setErro] = useState(""); // Mensagens de erro
   const [showConfirmModal, setShowConfirmModal] = useState(false); // Controle do modal de confirmação
   const [proximoNivel, setProximoNivel] = useState(null); // Armazena o nível selecionado pendente de confirmação
 
@@ -31,14 +34,14 @@ export default function ContentFichaAtributos() {
   // ---------------------------------------------------------------
 
   // Calcula o total de pontos gastos nos atributos
-  const pontosAtributosTotal = useMemo(() =>
-    atributos.reduce((acc, { valor }) => acc + valor, 0),
+  const pontosAtributosTotal = useMemo(
+    () => atributos.reduce((acc, { valor }) => acc + valor, 0),
     [atributos] // Recálculo só ocorre quando atributos mudam
   );
 
   // Calcula pontos disponíveis (total - gastos)
-  const pontosDisponiveis = useMemo(() =>
-    pontosAtribTotal - pontosAtributosTotal,
+  const pontosDisponiveis = useMemo(
+    () => pontosAtribTotal - pontosAtributosTotal,
     [pontosAtribTotal, pontosAtributosTotal] // Recálculo quando qualquer um mudar
   );
 
@@ -65,12 +68,12 @@ export default function ContentFichaAtributos() {
 
     // Validação de pontos excedidos
     if (novoTotal > pontosAtribTotal) {
-      setErro('Pontos de atribuição excedidos!');
+      setErro("Pontos de atribuição excedidos!");
       return;
     }
 
     // Se válido, atualiza o contexto e limpa erros
-    setErro('');
+    setErro("");
     atualizarAtributo(atributos[index].sigla, valorNumerico);
   };
 
@@ -79,8 +82,7 @@ export default function ContentFichaAtributos() {
    * @param {Event} event - Evento de mudança do select
    */
   const handleSelectNivel = (event) => {
-    const nivel = NIVEL_LIST.find(n => n.id === event.target.value);
-
+    const nivel = NIVEL_LIST.find((n) => n.id == event.target.value);
     if (nivel && nivel.id !== nivelSelecionado) {
       // Verifica se o novo nível tem pontos suficientes
       if (pontosAtributosTotal > nivel.pontosAtribuicao) {
@@ -98,14 +100,14 @@ export default function ContentFichaAtributos() {
    * Confirma a mudança de nível e reseta atributos
    * @param {Object} nivel - Novo nível selecionado
    */
-  const confirmarMudancaNivel = (nivel,resetAttr) => {
+  const confirmarMudancaNivel = (nivel, resetAttr) => {
     // Atualiza estados
     setNivelSelecionado(nivel.id);
     setPontosAtribTotal(nivel.pontosAtribuicao);
-    if(resetAttr) resetAtributos();
+    if (resetAttr) resetAtributos();
     // Fecha modal e limpa erros
     setShowConfirmModal(false);
-    setErro('');
+    setErro("");
   };
 
   /**
@@ -113,7 +115,7 @@ export default function ContentFichaAtributos() {
    */
   const handleResetAtributos = () => {
     resetAtributos();
-    setErro('');
+    setErro("");
   };
 
   // ---------------------------------------------------------------
@@ -128,13 +130,20 @@ export default function ContentFichaAtributos() {
           <Modal.Title>Confirmar Mudança de Nível</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Ao mudar para o nível {proximoNivel?.titulo}, todos os pontos de atribuição serão resetados. Deseja continuar?
+          Ao mudar para o nível {proximoNivel?.titulo}, todos os pontos de
+          atribuição serão resetados. Deseja continuar?
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={() => setShowConfirmModal(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => setShowConfirmModal(false)}
+          >
             Cancelar
           </Button>
-          <Button variant="primary" onClick={() => confirmarMudancaNivel(proximoNivel,true)}>
+          <Button
+            variant="primary"
+            onClick={() => confirmarMudancaNivel(proximoNivel, true)}
+          >
             Confirmar
           </Button>
         </Modal.Footer>
@@ -144,13 +153,15 @@ export default function ContentFichaAtributos() {
       <Row className="mb-3">
         {atributos.map(({ sigla, nome, valor }, index) => (
           <Col xs={4} md={2} className="mb-3" key={sigla}>
-            <Form.Label><b>{sigla}</b></Form.Label>
+            <Form.Label>
+              <b>{sigla}</b>
+            </Form.Label>
             {/* Input numérico para cada atributo */}
             <Form.Control
               type="number"
               min="0"
               placeholder={sigla}
-              value={valor}
+              value={valor || ''}
               onChange={(e) => handleChangeAttr(index, e.target.value)}
               disabled={pontosDisponiveis <= 0} // Desabilita quando não há pontos
             />
@@ -163,24 +174,31 @@ export default function ContentFichaAtributos() {
       <Row className="mb-3">
         {/* Dropdown de seleção de nível */}
         <Col xs={12} md={4}>
-          <SubtituloFicha texto='Nível' />
+          <SubtituloFicha texto="Nível" />
+
           <Form.Select
-            value={nivelSelecionado}
+            value={nivelSelecionado || ""}
             onChange={handleSelectNivel}
             className="mb-3"
           >
             {NIVEL_LIST.map(({ id, titulo }) => (
-              <option key={id} value={id}>{titulo}</option>
+              <option key={id} value={id}>
+                {titulo}
+              </option>
             ))}
           </Form.Select>
         </Col>
 
         {/* Painel de pontos de atribuição */}
         <Col xs={12} md={8} className="text-center">
-          <SubtituloFicha texto='Pontos de Atribuição' />
+          <SubtituloFicha texto="Pontos de Atribuição" />
 
           {/* Exibição de erros */}
-          {erro && <Alert variant="danger" className="mb-2">{erro}</Alert>}
+          {erro && (
+            <Alert variant="danger" className="mb-2">
+              {erro}
+            </Alert>
+          )}
 
           <Row>
             {/* Pontos disponíveis */}
@@ -188,20 +206,16 @@ export default function ContentFichaAtributos() {
               <Form.Label>Disponíveis</Form.Label>
               <Form.Control
                 type="number"
-                value={pontosDisponiveis}
+                value={pontosDisponiveis || 0}
                 readOnly
-                className={pontosDisponiveis < 0 ? 'text-danger' : ''} // Destaca negativo
+                className={clsx({ "text-danger": pontosDisponiveis < 0 })}
               />
             </Col>
 
             {/* Pontos totais do nível */}
             <Col xs={6} md={4}>
               <Form.Label>Total</Form.Label>
-              <Form.Control
-                type="number"
-                value={pontosAtribTotal}
-                readOnly
-              />
+              <Form.Control type="number" value={pontosAtribTotal || 0} readOnly />
             </Col>
           </Row>
 

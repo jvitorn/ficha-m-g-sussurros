@@ -13,6 +13,8 @@ import {
 
 import "@/app/styles/dashboard.css";
 
+import Head from 'next/head';
+
 export default function Dashboard() {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -29,6 +31,11 @@ export default function Dashboard() {
 
   return (
     <>
+      <Head>
+        <title>Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </Head>
       {/* Navbar com offcanvas */}
       <Navbar expand={false} className="mt-3">
         <Container fluid>
@@ -149,8 +156,10 @@ export default function Dashboard() {
                 <Row className="mb-5">
                   <Col md={6}>
                     <div className="folder-card mx-auto">
+                    <a href="/ficha">
                       <div className="folder-tab"></div>
                       <h5 className="mt-5">Fichas</h5>
+                      </a>
                     </div>
                   </Col>
                   <Col md={6}>

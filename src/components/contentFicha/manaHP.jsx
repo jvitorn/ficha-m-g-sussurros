@@ -1,12 +1,38 @@
 "use client";
 import { useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
+import clsx from 'clsx';
 // Componente customizado de subtítulo
 import SubtituloFicha from '@/components/subtituloFicha';
+// Contexto para gerenciamento de estado global dos atributos
+import { useFicha } from "@/context/fichaContext";
 
 export default function ContentFichaManaHp() {
-  const [manaDisponivel, setManaDisponivel] = useState(0);
-  const [manaTotal, setManaTotal] = useState(0);
+  // Busca os dados e funções do contexto de atributos
+  const {
+   hpTotal,
+   manaTotal
+  } = useFicha();
+
+  const [manaDisponivel, setManaDisponivel] = useState(manaTotal || 0);
+  const [hpDisponivel, setHpDisponivel] = useState(manaTotal || 0);
+
+
+  /**
+   * Manipula a seleção de subclasse no dropdown
+   * @param {Event} e - Evento de mudança do select
+   */
+  const handleManaDisponivel = (e) => {
+    setManaDisponivel(e.target.value)
+  };
+  
+  /**
+   * Manipula a seleção de subclasse no dropdown
+   * @param {Event} e - Evento de mudança do select
+   */
+  const handleHpDisponivel = (e) => {
+    setHpDisponivel(e.target.value)
+  };
 
   return (
     <>
@@ -20,7 +46,11 @@ export default function ContentFichaManaHp() {
               <Form.Control
                 type="number"
                 value={manaDisponivel}
-                className={manaDisponivel < 0 ? 'text-danger' : ''} // Destaca negativo
+                onChange={handleManaDisponivel}
+                className={clsx({
+                  'text-danger': manaDisponivel < 0,
+                  'text-info': manaDisponivel > manaTotal
+                })}
               />
             </Col>
             {/* Pontos totais de mana */}
@@ -29,6 +59,7 @@ export default function ContentFichaManaHp() {
               <Form.Control
                 type="number"
                 value={manaTotal}
+                disabled
                 readOnly
               />
             </Col>
@@ -42,8 +73,15 @@ export default function ContentFichaManaHp() {
               <Form.Label>Disponíveis</Form.Label>
               <Form.Control
                 type="number"
-                value={manaDisponivel}
-                className={manaDisponivel < 0 ? 'text-danger' : ''} // Destaca negativo
+                value={hpDisponivel}
+                onChange={handleHpDisponivel}
+                className={
+                  clsx(
+                    {
+                      'text-danger' : hpDisponivel < 0,
+                      'text-info': hpDisponivel > hpTotal
+                    }
+                )} 
               />
             </Col>
 
@@ -52,7 +90,8 @@ export default function ContentFichaManaHp() {
               <Form.Label>Total</Form.Label>
               <Form.Control
                 type="number"
-                value={manaTotal}
+                value={hpTotal}
+                disabled
                 readOnly
               />
             </Col>

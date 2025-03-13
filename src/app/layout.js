@@ -1,21 +1,24 @@
 "use client";
 
-import { LoadingProvider, useLoading } from '@/context/loadingContext';
-import usePageLoading from '@/hooks/usePageLoading';
-import Loader from '@/components/Loader';
+import { ThemeProvider } from "next-themes";
+import { LoadingProvider, useLoading } from "@/context/loadingContext";
+import usePageLoading from "@/hooks/usePageLoading";
+import Loader from "@/components/Loader";
 
-import { bigShouldersStencil } from './fonts';
-import '@/app/styles/global.css';
+import { bigShouldersStencil } from "./fonts";
+import "@/app/styles/global.css";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="pt-BR" className={bigShouldersStencil.variable}>
-       <body>
-        <LoadingProvider>
-          <MainLayout>{children}</MainLayout>
-        </LoadingProvider>
+    <html lang="pt-BR" className={bigShouldersStencil.variable} suppressHydrationWarning>
+      <body>
+        <ThemeProvider attribute="data-bs-theme" defaultTheme="system" enableSystem>
+          <LoadingProvider>
+            <MainLayout>{children}</MainLayout>
+          </LoadingProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

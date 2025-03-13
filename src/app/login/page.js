@@ -50,10 +50,10 @@ export default function Login() {
 
       const token = await response.json();
 
-      console.log(token)
-
       // Armazenar token (ajuste conforme sua estratégia de armazenamento)
-      localStorage.setItem('authToken', token);      
+      localStorage.setItem('authToken', token);    
+      
+      router.push('/dashboard')
 
     } catch (error) {
       setServerError(error.message);
