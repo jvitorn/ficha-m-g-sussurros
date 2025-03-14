@@ -8,7 +8,8 @@ export default function ListagemEscolhidaGroup({
   onRemoverItem,
   onUsarNivel,
   pontosDisponiveis,
-  textoNenhumItem = "Nenhum item adicionado."
+  textoNenhumItem = "Nenhum item adicionado.",
+  name = null // Novo prop para o name
 }) {
   return (
     <Row className="mb-4">
@@ -19,8 +20,20 @@ export default function ListagemEscolhidaGroup({
           <Alert variant="info">{textoNenhumItem}</Alert>
         ) : (
           <ListGroup>
-            {itens.map((item) => (
+            {itens.map((item, index) => (
               <ListGroup.Item key={item.id} className="mb-3">
+                {/* Inputs hidden para capturar os dados */}
+                <input 
+                  type="hidden" 
+                  name={`${name}[${index}].id`} 
+                  value={item.id} 
+                />
+                <input 
+                  type="hidden" 
+                  name={`${name}[${index}].nome`} 
+                  value={item.nome} 
+                />
+                {/* Conteúdo visível da lista */}
                 <Row className="align-items-center">
                   <Col xs={12} md={10}>
                     <div className="fw-bold">{item.nome}</div>

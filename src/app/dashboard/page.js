@@ -129,7 +129,7 @@ export default function Dashboard() {
                     }}
                   />
                   <Card.ImgOverlay
-                    className="d-flex flex-column justify-content-end"
+                    className="d-flex flex-column justify-content-end text-white"
                     style={{ borderRadius: "10px" }}
                   >
                     <Card.Title className="display-6">

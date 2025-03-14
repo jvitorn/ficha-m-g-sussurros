@@ -1,10 +1,7 @@
 "use client";
 
-// import "@/app/styles/global.css";
-// layout.js
-// import '@/app/styles/darkTheme.css';
-
 import Head from "next/head";
+import { useRef } from "react";
 import { Container, Button } from "react-bootstrap";
 import { FichaProvider, useFicha } from "@/context/fichaContext";
 import DynamicAccordion from "@/components/DynamicAccordion";
@@ -15,37 +12,35 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 // Componente interno que usa o contexto
 function ConteudoFicha() {
   const { nomePersonagem } = useFicha();
-
-  // Variáveis de exemplo
-  const corPersonagem = "Azul";
-  const mana = 100;
-  const nivel = 1;
-  const pontosAtrib = 0;
-  const magiaNome = "";
-  const magiaEfeito = "";
-  const raca = "";
-  const subclasses = "";
-  const resFisica = "";
-  const resMagica = "";
+  const formRef = useRef(null);
   const pericias = [];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Dados da ficha:", {
-      nomePersonagem,
-      corPersonagem,
-      mana,
-      nivel,
-      pontosAtrib,
-      magiaNome,
-      magiaEfeito,
-      raca,
-      subclasses,
-      resFisica,
-      resMagica,
-      pericias,
-    });
-    alert("Ficha atualizada com sucesso!");
+    
+    // Captura todos os dados do formulário
+    const formData = new FormData(formRef.current);
+    console.log('formData',formData)
+    const data = Object.fromEntries(formData.entries());
+    console.log('data',data)
+    try {
+      const response = await fetch('/api/test', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Erro no servidor");
+      
+      alert("Ficha salva com sucesso!");
+      console.log("Dados enviados:", data);
+    } catch (error) {
+      console.error("Erro ao salvar:", error);
+      alert(`Erro: ${error.message}`);
+    }
   };
 
   return (
@@ -53,8 +48,13 @@ function ConteudoFicha() {
       <h2 className="mb-3 text-capitalize text-center">{`${
         nomePersonagem ? nomePersonagem : "Ficha do personagem"
       } | Sussurros do Dragão`}</h2>
-      <form onSubmit={handleSubmit}>
+      <form ref={formRef} onSubmit={handleSubmit}>
         <DynamicAccordion items={accordionItemsFicha} />
+        <div className="text-center mt-4">
+            <Button variant="primary" type="submit" size="lg">
+              Salvar Personagem
+            </Button>
+          </div>
       </form>
     </Container>
   );

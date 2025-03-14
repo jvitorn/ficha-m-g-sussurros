@@ -1,9 +1,9 @@
-import { UserSchema } from '@/lib/schemas/userSchema';
-import { BasicModel } from '@/lib/models/BasicModel';
+import { UserSchema } from "@/lib/schemas/userSchema";
+import { BasicModel } from "@/lib/models/BasicModel";
 
 export class UserModel extends BasicModel {
   constructor() {
-    super('users', UserSchema); // Passa o nome da coleção e o schema
+    super("users", UserSchema); // Passa o nome da coleção e o schema
   }
 
   // Sobrescreve o método createIndexes para adicionar índices específicos
@@ -15,6 +15,7 @@ export class UserModel extends BasicModel {
 
   // Métodos específicos para UserModel (se necessário)
   async findUserByEmail(email) {
+    console.log('findUserByEmail',email)
     const collection = await this.getCollection();
     return collection.findOne({ email });
   }
@@ -23,5 +24,10 @@ export class UserModel extends BasicModel {
   async findUserByUsername(username) {
     const collection = await this.getCollection();
     return collection.findOne({ username });
+  }
+
+  async createUser(userData) {
+    const collection = await this.getCollection();
+    return collection.insertOne(userData);
   }
 }

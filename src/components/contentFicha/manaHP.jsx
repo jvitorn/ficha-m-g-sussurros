@@ -17,7 +17,6 @@ export default function ContentFichaManaHp() {
   const [manaDisponivel, setManaDisponivel] = useState(manaTotal || 0);
   const [hpDisponivel, setHpDisponivel] = useState(manaTotal || 0);
 
-
   /**
    * Manipula a seleção de subclasse no dropdown
    * @param {Event} e - Evento de mudança do select
@@ -51,6 +50,7 @@ export default function ContentFichaManaHp() {
                   'text-danger': manaDisponivel < 0,
                   'text-info': manaDisponivel > manaTotal
                 })}
+                name="mana.disponivel" // ← Name adicionado
               />
             </Col>
             {/* Pontos totais de mana */}
@@ -61,6 +61,7 @@ export default function ContentFichaManaHp() {
                 value={manaTotal}
                 disabled
                 readOnly
+                name="mana.total" // ← Name adicionado
               />
             </Col>
           </Row>
@@ -81,7 +82,8 @@ export default function ContentFichaManaHp() {
                       'text-danger' : hpDisponivel < 0,
                       'text-info': hpDisponivel > hpTotal
                     }
-                )} 
+                )}
+                name="hp.disponivel" // ← Name adicionado
               />
             </Col>
 
@@ -93,6 +95,7 @@ export default function ContentFichaManaHp() {
                 value={hpTotal}
                 disabled
                 readOnly
+                name="hp.total" // ← Name adicionado
               />
             </Col>
           </Row>

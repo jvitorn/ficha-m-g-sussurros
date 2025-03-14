@@ -16,17 +16,15 @@ export default function ContentFichaMagiasUnicas() {
   const [erro, setErro] = useState('');
 
   // ---------------------------------------------------------------
-  // MANIPULADORES DE EVENTOS
+  // MANIPULADORES DE EVENTOS (mantidos iguais)
   // ---------------------------------------------------------------
 
   const handleSalvarMagia = (novaMagia) => {
     if (magiasCadastradas.some(m => m.id === novaMagia.id)) {
-      // Editar magia existente
       setMagiasCadastradas(prev =>
         prev.map(m => m.id === novaMagia.id ? novaMagia : m)
       );
     } else {
-      // Adicionar nova magia
       setMagiasCadastradas([...magiasCadastradas, novaMagia]);
     }
 
@@ -82,7 +80,6 @@ export default function ContentFichaMagiasUnicas() {
               <Pencil className="me-2" /> Editar Magia
             </Button>
           )}
-
         </Col>
       </Row>
 
@@ -91,7 +88,7 @@ export default function ContentFichaMagiasUnicas() {
         show={showCriarModal}
         onHide={() => {
           setShowCriarModal(false);
-          setMagiaParaEditar(null); // Limpa a magia em edição ao fechar
+          setMagiaParaEditar(null);
         }}
         onSave={handleSalvarMagia}
         magiaParaEditar={magiaParaEditar}
@@ -113,13 +110,16 @@ export default function ContentFichaMagiasUnicas() {
         onUsarNivel={handleUsarNivelMagia}
         pontosDisponiveis={10} // Defina o valor correto dos pontos disponíveis
         textoNenhumItem="Nenhuma magia cadastrada."
+        name="magias" // ← Name adicionado
       />
 
       {/* Exibição de Erros */}
       {erro && (
         <Row className="mb-3">
           <Col xs={12}>
-            <Alert variant="danger">{erro}</Alert>
+            <Alert variant="danger" name="erro.mensagem"> {/* ← Name adicionado */}
+              {erro}
+            </Alert>
           </Col>
         </Row>
       )}

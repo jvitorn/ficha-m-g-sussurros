@@ -1,47 +1,33 @@
-import { z } from 'zod';
+import { z } from "zod";
 
-export const UserSchema = z.object({
-  id: z
-    .string()
-    .uuid()
-    .optional()
-    .describe("ID único gerado automaticamente"),
-  username: z
-    .string()
-    .min(3)
-    .max(30)
-    .describe("Nome de usuário único"),
-  email: z
-    .string()
-    .email()
-    .describe("Endereço de e-mail válido"),
-  password: z
-    .string()
-    .min(8)
-    .describe("Senha com pelo menos 8 caracteres"),
-  createdAt: z
-    .date()
-    .default(() => new Date())
-    .describe("Data de criação do registro"),
-  updatedAt: z
-    .date()
-    .default(() => new Date())
-    .describe("Data da última atualização")
-}).superRefine((data, ctx) => {
-  // Validação customizada: Nome de usuário não pode conter espaços
-  if (/\s/.test(data.username)) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "🚫 Nome de usuário não pode conter espaços",
-      path: ["username"]
-    });
-  }
-  // Validação customizada melhorada
-  if (data.username !== data.username.toLowerCase()) {
-    ctx.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Nome de usuário deve ser em minúsculas",
-      path: ["username"]
-    });
-  }
-});
+export const UserSchema = z
+  .object({
+    // Campos existentes
+    id: z.string().uuid().optional(),
+    username: z
+      .string()
+      .min(3, "Nome muito curto")
+      .max(30, "Nome muito longo")
+      .toLowerCase()
+      .refine((value) => !/\s/.test(value), {
+        message: "Nome não pode conter espaços",
+      }),
+    email: z.string().email("E-mail inválido"),
+    password: z.string().min(8, "Senha precisa de 8+ caracteres"),
+    role: z
+      .enum(["player", "gm"])
+      .default("player"),
+    createdAt: z.date().default(() => new Date()),
+    updatedAt: z.date().default(() => new Date()),
+
+    // Novos campos
+    campanhas: z.array(z.string()).default([]).optional(), // Referências a campanhas
+  })
+  .strict(); // Impede campos não declarados
+
+// Schema para Atualizações Parciais (PUT/PATCH)
+export const UserUpdateSchema = UserSchema.omit({ id: true, createdAt: true }) // Remove campos imutáveis [[1]]
+  .partial()
+  .required({
+    updatedAt: true, // Mantém updatedAt obrigatório [[4]]
+  });

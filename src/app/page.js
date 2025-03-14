@@ -26,6 +26,9 @@ export default function Home() {
                   <Nav.Link href="/login" className="zelda-nav-link">
                     Login
                   </Nav.Link>
+                  <Nav.Link href="/register" className="zelda-nav-link">
+                    Cadastrar
+                  </Nav.Link>
                   <Nav.Link eventKey="link-1" className="zelda-nav-link">
                     Contato
                   </Nav.Link>

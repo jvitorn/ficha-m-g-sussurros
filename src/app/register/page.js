@@ -15,46 +15,53 @@ import {
   FloatingLabel,
   Button,
 } from "react-bootstrap";
-import LoginIcon from "@mui/icons-material/Login";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 
 import { useLoading } from "@/context/loadingContext";
-import PopUp from "@/components/popUp";
 import Loader from "@/components/Loader";
+import PopUp from "@/components/popUp";
 
 import "@/app/styles/global.css";
 import "@/app/styles/login.css";
 
-const loginSchema = z.object({
-  username: z
-    .string()
-    .min(3, "Mínimo 3 caracteres")
-    .max(30, "Máximo 30 caracteres")
-    .regex(/^[a-z0-9_]+$/, "Apenas letras minúsculas, números e _"),
-  password: z
-    .string()
-    .min(8, "Mínimo 8 caracteres")
-    .regex(/[A-Z]/, "Pelo menos 1 letra maiúscula")
-    .regex(/[0-9]/, "Pelo menos 1 número"),
-});
+const registerSchema = z
+  .object({
+    username: z
+      .string()
+      .min(3, "Mínimo 3 caracteres")
+      .max(30, "Máximo 30 caracteres")
+      .regex(/^[a-z0-9_]+$/, "Apenas letras minúsculas, números e _"),
+    email: z.string().email("E-mail inválido"),
+    password: z
+      .string()
+      .min(8, "Mínimo 8 caracteres")
+      .regex(/[A-Z]/, "Pelo menos 1 letra maiúscula")
+      .regex(/[0-9]/, "Pelo menos 1 número"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
 
-export default function Login() {
+export default function Register() {
   const { resolvedTheme } = useTheme();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [serverError, setServerError] = useState("");
-  const [showSuccess, setShowSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
   const { loading, startLoading, stopLoading } = useLoading();
+
+  useEffect(() => setMounted(true), []);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(loginSchema),
+    resolver: zodResolver(registerSchema),
   });
-
-  useEffect(() => setMounted(true), []);
 
   const onSubmit = async (data) => {
     try {
@@ -62,7 +69,7 @@ export default function Login() {
       setIsSubmitting(true);
       setServerError("");
 
-      const response = await fetch("/api/login", {
+      const response = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -70,11 +77,10 @@ export default function Login() {
 
       const responseData = await response.json();
       if (!response.ok)
-        throw new Error(responseData.error || "Erro na autenticação");
+        throw new Error(responseData.error || "Erro no cadastro");
 
-      localStorage.setItem("authToken", responseData.token);
-      setShowSuccess(true);
-      setTimeout(() => router.push("/dashboard"), 2000);
+      setShowPopUp(true);
+      setTimeout(() => router.push("/login"), 3000);
     } catch (error) {
       setServerError(error.message);
     } finally {
@@ -83,23 +89,23 @@ export default function Login() {
     }
   };
 
-  if (loading) return <Loader message="Autenticando..." />;
+  if (loading) return <Loader message="Registrando..." />;
 
   return (
     <>
       <Head>
-        <title>Logue no sistema</title>
+        <title>Criar nova conta</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </Head>
 
       <PopUp
-        title="Login realizado!"
-        text="Redirecionando para o dashboard..."
+        title="Sucesso!"
+        text="Cadastro realizado! Redirecionando para login..."
         variant="success"
-        show={showSuccess}
-        onClose={() => setShowSuccess(false)}
-        duration={2000}
+        show={showPopUp}
+        onClose={() => setShowPopUp(false)}
+        duration={3000}
       />
 
       <Container
@@ -113,7 +119,7 @@ export default function Login() {
                 "display-2 fw-bold fontLogoBold text-center mb-3 text-light"
               }
             >
-              Login
+              Cadastre-se
             </h1>
 
             <Row>
@@ -134,7 +140,7 @@ export default function Login() {
                   )}
 
                   <FloatingLabel
-                    controlId="floatingInput"
+                    controlId="floatingUsername"
                     label="Username"
                     className="mb-3"
                   >
@@ -150,18 +156,50 @@ export default function Login() {
                   </FloatingLabel>
 
                   <FloatingLabel
+                    controlId="floatingEmail"
+                    label="Email"
+                    className="mb-3"
+                  >
+                    <Form.Control
+                      type="email"
+                      placeholder="email@exemplo.com"
+                      isInvalid={!!errors.email}
+                      {...register("email")}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.email?.message}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+
+                  <FloatingLabel
                     controlId="floatingPassword"
-                    label="Password"
-                    className="mb-4"
+                    label="Senha"
+                    className="mb-3"
                   >
                     <Form.Control
                       type="password"
-                      placeholder="Password"
+                      placeholder="Senha"
                       isInvalid={!!errors.password}
                       {...register("password")}
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.password?.message}
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+
+                  <FloatingLabel
+                    controlId="floatingConfirmPassword"
+                    label="Confirmar Senha"
+                    className="mb-4"
+                  >
+                    <Form.Control
+                      type="password"
+                      placeholder="Confirmar Senha"
+                      isInvalid={!!errors.confirmPassword}
+                      {...register("confirmPassword")}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.confirmPassword?.message}
                     </Form.Control.Feedback>
                   </FloatingLabel>
 
@@ -176,17 +214,14 @@ export default function Login() {
                       size="lg"
                       disabled={isSubmitting}
                     >
-                      <LoginIcon sx={{ marginRight: "10px" }} />
-                      {isSubmitting ? "Autenticando..." : "Entrar"}
+                      <HowToRegIcon sx={{ marginRight: "10px" }} />
+                      {isSubmitting ? "Registrando..." : "Criar Conta"}
                     </Button>
                   </div>
 
                   <div className="text-center">
-                    <a href="/redefinedpass" className="text-gold me-3">
-                      Esqueceu sua senha?
-                    </a>
-                    <a href="/register" className="text-gold">
-                      Criar nova conta
+                    <a href="/login" className="text-gold">
+                      Já tem conta? Faça login
                     </a>
                   </div>
                 </form>

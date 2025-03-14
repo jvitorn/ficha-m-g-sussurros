@@ -1,32 +1,54 @@
-import { NextResponse } from 'next/server';
-import { UserService } from '../business/userService';
+// controllers/userAuthenticateController.js
+import { NextResponse } from "next/server";
+import { UserService } from "../business/userService";
+const { AuthSchema } = require("@/lib/schemas/authSchema");
 
 export class UserAuthenticateController {
   constructor() {
-    this.userService = new UserService(); // Instância do UserService
+    this.userService = new UserService();
   }
 
   async auth(req) {
     try {
-      const { username, password } = await req.json();
-      
-      if (!username || !password) {
-        return NextResponse.json(
-          { error: 'Credenciais inválidas' },
-          { status: 400 }
-        );
-      }
+      const input = await req.json();
 
-      const token = await this.userService.authenticate(username, password);
-      return NextResponse.json(token);
+      // Validação com Zod
+      const validatedData = AuthSchema.parse(input);
 
+      const { token, user } = await this.userService.authenticate(
+        validatedData.username,
+        validatedData.password
+      );
+
+      return NextResponse.json({
+        token,
+        user: {
+          id: user._id,
+          username: user.username,
+          role: user.role,
+        },
+      });
     } catch (error) {
-      console.error('Erro na autenticação:', error);
+      console.error("[UserAuthenticateController] - Erro na autenticação:", error);
+      const status =
+        error.name === "ZodError"
+          ? 422
+          : error.message.includes("credenciais")
+          ? 401
+          : 500;
+
       return NextResponse.json(
-        { error: error.message || 'Erro interno no servidor' },
-        { status: error.status || 500 }
+        { error: this.getErrorMessage(error) },
+        { status }
       );
     }
   }
 
+  getErrorMessage(error) {
+    if (error.name === "ZodError") return "Dados inválidos";
+    if (error.message.includes("Usuário") || error.message.includes("Senha")) {
+      return "Credenciais inválidas";
+    }
+    return "Erro na autenticação";
+  }
 }

@@ -7,3 +7,14 @@
   min-height: 100vh;
   padding: 20px;
 }
+/* Ajustes para tema escuro */
+[data-bs-theme="dark"] .login-background-container {
+  background: linear-gradient(rgba(0, 0, 0, 0.9), url('/images/background/loginBackground.jpg'));
+}
+
+.themed-card {
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  border: 1px solid var(--bs-border-color);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}

@@ -25,6 +25,7 @@ export default function ContentFichaNome() {
               placeholder="Nome do Personagem"
               value={nomePersonagem || ''}
               onChange={(e) => setNomePersonagem(e.target.value)}
+              name="nomePersonagem"
             />
           </Form.Group>
         </Col>
@@ -36,6 +37,7 @@ export default function ContentFichaNome() {
               placeholder="Cor do Grimório"
               value={corGrimorio || ''}
               onChange={(e) => setCorGrimorio(e.target.value)}
+              name="nomeGrimorio"
             />
           </Form.Group>
         </Col>
