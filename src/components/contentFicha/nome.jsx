@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
 // Contexto para gerenciamento de estado global dos atributos
-import { useFicha } from "@/context/fichaContext";
+import { useFicha } from "@/contexts/fichaContext";
 
 import SubtituloFicha from '../subtituloFicha';
 

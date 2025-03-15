@@ -1,9 +1,11 @@
-import { z } from "zod";
+import { z } from "zod"
+
+import { objectIdSchema } from "./objectIdSchema.js";
 
 export const UserSchema = z
   .object({
     // Campos existentes
-    id: z.string().uuid().optional(),
+    _id: objectIdSchema.optional(),
     username: z
       .string()
       .min(3, "Nome muito curto")

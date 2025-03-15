@@ -3,7 +3,7 @@
 import Head from "next/head";
 import { useRef } from "react";
 import { Container, Button } from "react-bootstrap";
-import { FichaProvider, useFicha } from "@/context/fichaContext";
+import { FichaProvider, useFicha } from "@/contexts/fichaContext";
 import DynamicAccordion from "@/components/DynamicAccordion";
 import accordionItemsFicha from "@/data/accordionItems";
 

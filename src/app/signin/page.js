@@ -16,8 +16,8 @@ import {
   Button,
 } from "react-bootstrap";
 import LoginIcon from "@mui/icons-material/Login";
-
-import { useLoading } from "@/context/loadingContext";
+import Cookies from 'js-cookie'; 
+import { useLoading } from "@/contexts/loadingContext";
 import PopUp from "@/components/popUp";
 import Loader from "@/components/Loader";
 
@@ -37,7 +37,16 @@ const loginSchema = z.object({
     .regex(/[0-9]/, "Pelo menos 1 número"),
 });
 
-export default function Login() {
+/**
+ * Page de login do sistema. Contém um formulário para efetuar o login e uma
+ * opção para criar uma nova conta.
+ *
+ * Também exibe um loader enquanto a autenticação est  sendo realizada e
+ * exibe um popup de sucesso quando o login   efetuado com sucesso.
+ *
+ * @returns O JSX da p gina de login.
+ */
+export default function Signin() {
   const { resolvedTheme } = useTheme();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -72,7 +81,9 @@ export default function Login() {
       if (!response.ok)
         throw new Error(responseData.error || "Erro na autenticação");
 
-      localStorage.setItem("authToken", responseData.token);
+      // Armazenando o token em um cookie
+      Cookies.set("authToken", responseData.token, { expires: 1 }); // O cookie expira
+
       setShowSuccess(true);
       setTimeout(() => router.push("/dashboard"), 2000);
     } catch (error) {

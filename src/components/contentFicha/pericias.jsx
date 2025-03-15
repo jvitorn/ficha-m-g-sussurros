@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Table, Form, Row, Col } from "react-bootstrap";
-import { useFicha } from "@/context/fichaContext";
+import { useFicha } from "@/contexts/fichaContext";
 
 export default function ContentFichaPericias() {
   const { atributos } = useFicha();

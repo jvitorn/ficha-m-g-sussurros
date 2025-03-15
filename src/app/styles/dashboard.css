@@ -22,6 +22,7 @@
     padding: 1.5rem;
     color: #fff;         /* Texto branco para contrastar */
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    text-decoration: none;
   }
 
   /* Efeito ao passar o mouse */
@@ -39,4 +40,5 @@
     height: 24px;
     background-color: #6a75ca;
     border-radius: 8px 8px 0 0;
+    text-decoration: none;
   }

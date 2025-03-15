@@ -1,7 +1,8 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import { LoadingProvider, useLoading } from "@/context/loadingContext";
+import { LoadingProvider, useLoading } from "@/contexts/loadingContext";
+import { AuthProvider } from "@/contexts/authContext";
 import usePageLoading from "@/hooks/usePageLoading";
 import Loader from "@/components/Loader";
 
@@ -12,11 +13,21 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="pt-BR" className={bigShouldersStencil.variable} suppressHydrationWarning>
+    <html
+      lang="pt-BR"
+      className={bigShouldersStencil.variable}
+      suppressHydrationWarning
+    >
       <body>
-        <ThemeProvider attribute="data-bs-theme" defaultTheme="system" enableSystem>
+        <ThemeProvider
+          attribute="data-bs-theme"
+          defaultTheme="system"
+          enableSystem
+        >
           <LoadingProvider>
-            <MainLayout>{children}</MainLayout>
+            <AuthProvider>
+              <MainLayout>{children}</MainLayout>
+            </AuthProvider>
           </LoadingProvider>
         </ThemeProvider>
       </body>

@@ -17,7 +17,7 @@ import {
 } from "react-bootstrap";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 
-import { useLoading } from "@/context/loadingContext";
+import { useLoading } from "@/contexts/loadingContext";
 import Loader from "@/components/Loader";
 import PopUp from "@/components/popUp";
 

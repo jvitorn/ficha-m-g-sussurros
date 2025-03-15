@@ -1,25 +1,27 @@
 import { z } from "zod";
+import { objectIdSchema } from './objectIdSchema.js';
+
 
 export const CharacterSheetSchema = z
   .object({
-    id: z.string().uuid().optional(),
+    _id: objectIdSchema.optional(),
     characterName: z
       .string()
       .min(3, "Name too short")
       .max(100, "Name too long"),
-    campaignId: z.string().uuid(),
-    playerId: z.string().uuid(),
-    classId: z.string().uuid(),
-    subclassId: z.string().uuid().optional(),
+    campaignId: objectIdSchema,
+    playerId: objectIdSchema,
+    classId: objectIdSchema,
+    subclassId: objectIdSchema,
     attributes: z.record(z.number().int()),
     attributePoints: z.record(z.number().int()),
-    commonSpells: z.array(z.string().uuid()).default([]).optional(),
-    uniqueSpells: z.array(z.string().uuid()).default([]).optional(),
-    abilities: z.array(z.string().uuid()).default([]).optional(),
-    items: z.array(z.string().uuid()).default([]).optional(),
+    commonSpellsId: objectIdSchema.optional(),
+    uniqueSpellsId: objectIdSchema.optional(),
+    abilities: objectIdSchema.optional(),
+    items: objectIdSchema.optional(),
     personalDefense: z.number().int().min(0, "Defense cannot be negative"),
     resistances: z.record(z.number().int()),
-    levelId: z.string().uuid(),
+    levelId: objectIdSchema,
     spellConfig: z.record(z.unknown()).optional(),
     createdAt: z.date().default(() => new Date()),
     updatedAt: z.date().default(() => new Date()),

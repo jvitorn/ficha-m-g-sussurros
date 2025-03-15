@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "seed": "node --no-warnings scripts/seed-db.js",
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
@@ -21,7 +22,10 @@
     "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.3",
     "clsx": "^2.1.1",
+    "dotenv": "^16.4.7",
+    "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
     "mongodb": "^6.14.2",
     "mongodb-memory-server": "^10.1.4",
     "next": "15.1.7",

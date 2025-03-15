@@ -1,9 +1,10 @@
 import { z } from "zod";
+import { objectIdSchema } from "./objectIdSchema.js";
 
 export const ClassSchema = z
   .object({
-    id: z.string().uuid().optional(),
-    name: z.string().min(3, "Name too short").max(100, "Name too long"),
+    _id: objectIdSchema.optional(),
+    name: z.string().min(3, "Nome muito curto").max(100, "Nome muito longo"),
     description: z.string().optional(),
     advantages: z.array(z.string()).default([]).optional(),
     disadvantages: z.array(z.string()).default([]).optional(),
@@ -12,8 +13,15 @@ export const ClassSchema = z
   })
   .strict();
 
-export const ClassUpdateSchema = ClassSchema.omit({ id: true, createdAt: true })
+// Schema para updates
+export const ClassUpdateSchema = ClassSchema.pick({
+  name: true,
+  description: true,
+  advantages: true,
+  disadvantages: true,
+  updatedAt: true,
+})
   .partial()
-  .required({
-    updatedAt: true,
+  .extend({
+    updatedAt: z.date().default(() => new Date()),
   });

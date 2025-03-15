@@ -1,6 +1,6 @@
 .login-background-container {
   background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                    url('/images/background/loginBackground.jpg');
+                    url('/images/background/loginbackground.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -9,7 +9,7 @@
 }
 /* Ajustes para tema escuro */
 [data-bs-theme="dark"] .login-background-container {
-  background: linear-gradient(rgba(0, 0, 0, 0.9), url('/images/background/loginBackground.jpg'));
+  background: linear-gradient(rgba(0, 0, 0, 0.9), url('/images/background/loginbackground.jpg'));
 }
 
 .themed-card {

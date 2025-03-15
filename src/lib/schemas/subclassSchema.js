@@ -1,13 +1,14 @@
 import { z } from "zod";
+import { objectIdSchema } from "./objectIdSchema.js";
 
 export const SubclassSchema = z
   .object({
-    id: z.string().uuid().optional(),
-    name: z.string().min(3, "Name too short").max(100, "Name too long"),
+    _id: objectIdSchema.optional(),
+    name: z.string().min(3, "Nome muito curto").max(100, "Nome muito longo"),
     description: z.string().optional(),
-    advantages: z.array(z.string()).default([]).optional(),
-    disadvantages: z.array(z.string()).default([]).optional(),
-    classId: z.string().uuid(), // Reference to parent class
+    classId: objectIdSchema, // Agora aceita ObjectId ou string
+    advantages: z.array(z.string()).default([]),
+    disadvantages: z.array(z.string()).default([]),
     createdAt: z.date().default(() => new Date()),
     updatedAt: z.date().default(() => new Date()),
   })

@@ -1,23 +1,5 @@
 import { z } from 'zod';
 
-// Schema para os níveis de magia
-export const LevelSchema = z.object({
-  level: z
-    .number()
-    .int()
-    .min(1)
-    .max(10)
-    .describe("Nível da magia (1 a 10)"),
-  description: z
-    .string()
-    .max(500)
-    .describe("Descrição detalhada do nível"),
-  cost: z
-    .number()
-    .int()
-    .min(0)
-    .describe("Custo de mana/energia para usar o nível")
-});
 
 // Schema principal da magia
 export const MagicSchema = z.object({

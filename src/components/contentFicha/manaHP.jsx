@@ -5,7 +5,7 @@ import clsx from 'clsx';
 // Componente customizado de subtítulo
 import SubtituloFicha from '@/components/subtituloFicha';
 // Contexto para gerenciamento de estado global dos atributos
-import { useFicha } from "@/context/fichaContext";
+import { useFicha } from "@/contexts/fichaContext";
 
 export default function ContentFichaManaHp() {
   // Busca os dados e funções do contexto de atributos

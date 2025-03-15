@@ -2,7 +2,7 @@
 import { useState, useMemo } from "react";
 import { Row, Col, Form, Alert, Button, Modal } from "react-bootstrap";
 import clsx from "clsx";
-import { useFicha } from "@/context/fichaContext";
+import { useFicha } from "@/contexts/fichaContext";
 import SubtituloFicha from "@/components/subtituloFicha";
 
 export default function ContentFichaAtributos() {

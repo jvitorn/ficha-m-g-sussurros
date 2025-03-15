@@ -1,8 +1,9 @@
 import { z } from "zod";
+import { objectIdSchema } from "./objectIdSchema.js";
 
 export const LevelSchema = z
   .object({
-    id: z.string().uuid().optional(),
+    _id: objectIdSchema.optional(),
     name: z.string().min(3, "Name too short").max(100, "Name too long"),
     attributePoints: z
       .number()
