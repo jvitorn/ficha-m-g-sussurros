@@ -5,6 +5,7 @@ export const LevelSchema = z
   .object({
     _id: objectIdSchema.optional(),
     name: z.string().min(3, "Name too short").max(100, "Name too long"),
+    value : z.number(),
     attributePoints: z
       .number()
       .int()

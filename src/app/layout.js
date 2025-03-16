@@ -2,7 +2,7 @@
 
 import { ThemeProvider } from "next-themes";
 import { LoadingProvider, useLoading } from "@/contexts/loadingContext";
-import { AuthProvider } from "@/contexts/authContext";
+// import { AuthProvider } from "@/contexts/authContext";
 import usePageLoading from "@/hooks/usePageLoading";
 import Loader from "@/components/Loader";
 
@@ -25,9 +25,10 @@ export default function RootLayout({ children }) {
           enableSystem
         >
           <LoadingProvider>
-            <AuthProvider>
-              <MainLayout>{children}</MainLayout>
-            </AuthProvider>
+            <MainLayout>{children}</MainLayout>
+            {/* <AuthProvider>
+              
+            </AuthProvider> */}
           </LoadingProvider>
         </ThemeProvider>
       </body>

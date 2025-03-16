@@ -6,36 +6,37 @@ import {
   useContext,
   useCallback,
   useMemo,
+  useEffect,
 } from "react";
 
 // Cria o contexto de ficha
 const FichaContext = createContext();
 
 // Lista fixa de níveis com suas propriedades
-const NIVEL_LIST = [
-  { id: 1, titulo: "Nivel 1", valor: 1, pontosAtribuicao: 20 },
-  { id: 2, titulo: "Nivel 2", valor: 2, pontosAtribuicao: 24 },
-  { id: 3, titulo: "Nivel 3", valor: 3, pontosAtribuicao: 28 },
-  { id: 4, titulo: "Nivel 4", valor: 4, pontosAtribuicao: 32 },
-  { id: 5, titulo: "Nivel 5", valor: 5, pontosAtribuicao: 36 },
-  { id: 6, titulo: "Nivel 6", valor: 6, pontosAtribuicao: 40 },
-  { id: 7, titulo: "Nivel 7", valor: 7, pontosAtribuicao: 44 },
-  { id: 8, titulo: "Nivel 8", valor: 8, pontosAtribuicao: 48 },
-  { id: 9, titulo: "Nivel 9", valor: 9, pontosAtribuicao: 52 },
-  { id: 10, titulo: "Nivel 10", valor: 10, pontosAtribuicao: 56 },
-  { id: 11, titulo: "Nivel 11", valor: 11, pontosAtribuicao: 60 },
-  { id: 12, titulo: "Nivel 12", valor: 12, pontosAtribuicao: 64 },
-  { id: 13, titulo: "Nivel 13", valor: 13, pontosAtribuicao: 68 },
-  { id: 14, titulo: "Nivel 14", valor: 14, pontosAtribuicao: 72 },
-  { id: 15, titulo: "Nivel 15", valor: 15, pontosAtribuicao: 76 },
-  { id: 16, titulo: "Nivel 16", valor: 16, pontosAtribuicao: 80 },
-  { id: 17, titulo: "Nivel 17", valor: 17, pontosAtribuicao: 84 },
-  { id: 18, titulo: "Nivel 18", valor: 18, pontosAtribuicao: 88 },
-  { id: 19, titulo: "Nivel 19", valor: 19, pontosAtribuicao: 92 },
-  { id: 20, titulo: "Nivel 20", valor: 20, pontosAtribuicao: 96 },
-];
+// const nivelList = [
+//   { id: 1, titulo: "Nivel 1", valor: 1, pontosAtribuicao: 20 },
+//   { id: 2, titulo: "Nivel 2", valor: 2, pontosAtribuicao: 24 },
+//   { id: 3, titulo: "Nivel 3", valor: 3, pontosAtribuicao: 28 },
+//   { id: 4, titulo: "Nivel 4", valor: 4, pontosAtribuicao: 32 },
+//   { id: 5, titulo: "Nivel 5", valor: 5, pontosAtribuicao: 36 },
+//   { id: 6, titulo: "Nivel 6", valor: 6, pontosAtribuicao: 40 },
+//   { id: 7, titulo: "Nivel 7", valor: 7, pontosAtribuicao: 44 },
+//   { id: 8, titulo: "Nivel 8", valor: 8, pontosAtribuicao: 48 },
+//   { id: 9, titulo: "Nivel 9", valor: 9, pontosAtribuicao: 52 },
+//   { id: 10, titulo: "Nivel 10", valor: 10, pontosAtribuicao: 56 },
+//   { id: 11, titulo: "Nivel 11", valor: 11, pontosAtribuicao: 60 },
+//   { id: 12, titulo: "Nivel 12", valor: 12, pontosAtribuicao: 64 },
+//   { id: 13, titulo: "Nivel 13", valor: 13, pontosAtribuicao: 68 },
+//   { id: 14, titulo: "Nivel 14", valor: 14, pontosAtribuicao: 72 },
+//   { id: 15, titulo: "Nivel 15", valor: 15, pontosAtribuicao: 76 },
+//   { id: 16, titulo: "Nivel 16", valor: 16, pontosAtribuicao: 80 },
+//   { id: 17, titulo: "Nivel 17", valor: 17, pontosAtribuicao: 84 },
+//   { id: 18, titulo: "Nivel 18", valor: 18, pontosAtribuicao: 88 },
+//   { id: 19, titulo: "Nivel 19", valor: 19, pontosAtribuicao: 92 },
+//   { id: 20, titulo: "Nivel 20", valor: 20, pontosAtribuicao: 96 },
+// ];
 // Lista fixa de raças e suas propriedades
-const RACA_LIST = [
+const racaList = [
   {
     id: 1,
     nome: "Humano",
@@ -60,7 +61,7 @@ const RACA_LIST = [
   { id: 8, nome: "Espectral" },
 ];
 // Lista fixa de classes
-const CLASSE_LIST = [
+const classeList = [
   {
     id: 1,
     nome: "Suporte",
@@ -124,7 +125,7 @@ const CLASSE_LIST = [
   { id: 4, nome: "Corpo a Corpo" },
   { id: 5, nome: "Especialista" },
 ];
-const SUBCLASSE_LIST = [
+const subclasseList = [
   {
     id: 1,
     nome: "Mestre das Maldições",
@@ -262,6 +263,36 @@ const calcularFormula = (formula, atributosCalculados) => {
  * para os componentes filhos.
  */
 export function FichaProvider({ children }) {
+  // Dados enviados via APIs
+  //  const [nivelList, setNivelList] = useState([]);
+  const [nivelList, setNivelList] = useState([
+    { id: 1, titulo: "Nivel 1", valor: 1, pontosAtribuicao: 20 },
+    { id: 2, titulo: "Nivel 2", valor: 2, pontosAtribuicao: 24 },
+    { id: 3, titulo: "Nivel 3", valor: 3, pontosAtribuicao: 28 },
+    { id: 4, titulo: "Nivel 4", valor: 4, pontosAtribuicao: 32 },
+    { id: 5, titulo: "Nivel 5", valor: 5, pontosAtribuicao: 36 },
+    { id: 6, titulo: "Nivel 6", valor: 6, pontosAtribuicao: 40 },
+    { id: 7, titulo: "Nivel 7", valor: 7, pontosAtribuicao: 44 },
+    { id: 8, titulo: "Nivel 8", valor: 8, pontosAtribuicao: 48 },
+    { id: 9, titulo: "Nivel 9", valor: 9, pontosAtribuicao: 52 },
+    { id: 10, titulo: "Nivel 10", valor: 10, pontosAtribuicao: 56 },
+    { id: 11, titulo: "Nivel 11", valor: 11, pontosAtribuicao: 60 },
+    { id: 12, titulo: "Nivel 12", valor: 12, pontosAtribuicao: 64 },
+    { id: 13, titulo: "Nivel 13", valor: 13, pontosAtribuicao: 68 },
+    { id: 14, titulo: "Nivel 14", valor: 14, pontosAtribuicao: 72 },
+    { id: 15, titulo: "Nivel 15", valor: 15, pontosAtribuicao: 76 },
+    { id: 16, titulo: "Nivel 16", valor: 16, pontosAtribuicao: 80 },
+    { id: 17, titulo: "Nivel 17", valor: 17, pontosAtribuicao: 84 },
+    { id: 18, titulo: "Nivel 18", valor: 18, pontosAtribuicao: 88 },
+    { id: 19, titulo: "Nivel 19", valor: 19, pontosAtribuicao: 92 },
+    { id: 20, titulo: "Nivel 20", valor: 20, pontosAtribuicao: 96 },
+  ]);
+  const [racaList, setRacaList] = useState([]);
+  const [classeList, setClasseList] = useState([]);
+  const [subclasseList, setsubclasseList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   // Estado inicial dos atributos do personagem
   const [atributos, setAtributos] = useState([
     { nome: "Agilidade", sigla: "AGI", valor: 0 },
@@ -278,7 +309,33 @@ export function FichaProvider({ children }) {
   const [subclasseSelecionada, setSubclasseSelecionada] = useState(null);
   const [racaSelecionada, setRacaSelecionada] = useState(null);
   // Nivel
-  const [nivelSelecionado, setNivelSelecionado] = useState(NIVEL_LIST[0].id); // ID do nível atual
+  const [nivelSelecionado, setNivelSelecionado] = useState(nivelList[0].id); // ID do nível atual
+
+  // Buscar dados da API
+  useEffect(() => {
+    const fetchSheetData = async () => {
+      try {
+        const response = await fetch("/api/sheets");
+        const data = await response.json();
+
+        if (data.success) {
+          if (data.levels) setNivelList(data.levels);
+          setRacaList(data.races);
+          setClasseList(data.classes);
+          setsubclasseList(data.subclasses);
+        } else {
+          throw new Error("Falha ao carregar dados");
+        }
+      } catch (err) {
+        setError(err.message);
+        // Considerar fallback para dados locais se necessário
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSheetData();
+  }, []);
 
   // ----------------------------------------------------------------
   // FUNÇÕES DO CONTEXTO
@@ -319,7 +376,7 @@ export function FichaProvider({ children }) {
         {}
       );
       const nivel =
-        NIVEL_LIST.find((n) => n.id === nivelSelecionado)?.valor || 0;
+        nivelList.find((n) => n.id === nivelSelecionado)?.valor || 0;
 
       const params = {
         ...formula.atributos.reduce(
@@ -335,20 +392,20 @@ export function FichaProvider({ children }) {
   ); // Dependências do useCallback
 
   const hpTotal = useMemo(() => {
-    if (!classeSelecionada?.formulas) return 0;
-    const formulaHP = classeSelecionada.formulas.find((f) => f.name === "HP");
+    if (!classeSelecionada?.receipt) return 0;
+    const formulaHP = classeSelecionada.receipt.find((f) => f.name === "HP");
     return formulaHP ? calcularFormulaClasse(formulaHP) : 0;
   }, [atributos, nivelSelecionado, classeSelecionada]);
 
   const manaTotal = useMemo(() => {
-    if (!classeSelecionada?.formulas) return 0;
-    const formulaMana = classeSelecionada.formulas.find((f) => f.name === "MP");
+    if (!classeSelecionada?.receipt) return 0;
+    const formulaMana = classeSelecionada.receipt.find((f) => f.name === "MP");
     return formulaMana ? calcularFormulaClasse(formulaMana) : 0;
   }, [atributos, nivelSelecionado, classeSelecionada]);
 
   const defesaPassiva = useMemo(() => {
-    if (!classeSelecionada?.formulas) return 0;
-    const formulaDef = classeSelecionada.formulas.find((f) => f.name === "DEF");
+    if (!classeSelecionada?.receipt) return 0;
+    const formulaDef = classeSelecionada.receipt.find((f) => f.name === "DEF");
     return formulaDef ? calcularFormulaClasse(formulaDef) : 0;
   }, [atributos, nivelSelecionado, classeSelecionada]);
   // ---------------------------------------------------
@@ -362,10 +419,10 @@ export function FichaProvider({ children }) {
         atributos, // Lista de atributos do personagem
         atualizarAtributo, // Função para atualizar um atributo específico
         resetAtributos, // Função para resetar os atributos para o estado inicial
-        NIVEL_LIST, // Lista fixa de níveis disponíveis
-        RACA_LIST, // lista fixa de Raças
-        CLASSE_LIST, // Lista fixa de Classes
-        SUBCLASSE_LIST, // Lista fixa de Sub Classes
+        nivelList, // Lista fixa de níveis disponíveis
+        racaList, // lista fixa de Raças
+        classeList, // Lista fixa de Classes
+        subclasseList, // Lista fixa de Sub Classes
         calcularFormulaClasse,
         classeSelecionada,
         setClasseSelecionada,
@@ -378,7 +435,8 @@ export function FichaProvider({ children }) {
         hpTotal,
         manaTotal,
         defesaPassiva,
-        nomePersonagem, setNomePersonagem
+        nomePersonagem,
+        setNomePersonagem,
       }}
     >
       {children}

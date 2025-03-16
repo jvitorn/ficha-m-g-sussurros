@@ -1,6 +1,14 @@
 import { z } from "zod";
 import { objectIdSchema } from "./objectIdSchema.js";
 
+// Schema para formulas de calculo de classe
+const ClassReceiptSchema = z.object({
+  name: z.string().min(1).max(8),
+  structure: z.string().min(1),
+  atributes: z.array(z.string()).default([]),
+  useLevel: z.boolean().default(false),
+});
+
 export const ClassSchema = z
   .object({
     _id: objectIdSchema.optional(),
@@ -10,6 +18,9 @@ export const ClassSchema = z
     disadvantages: z.array(z.string()).default([]).optional(),
     createdAt: z.date().default(() => new Date()),
     updatedAt: z.date().default(() => new Date()),
+    receipt: z
+      .array(ClassReceiptSchema)
+      .min(1, "Pelo menos uma formula é necessária"),
   })
   .strict();
 

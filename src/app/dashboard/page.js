@@ -5,8 +5,8 @@ import NavbarDashboard from "@/components/NavbarDashboard";
 import CampaignCard from "@/components/cards/CampaignCard";
 import FolderCard from "@/components/cards/FolderCard";
 import WelcomeStats from "@/components/ui/WelcomeStats";
-import CreationButtons from "@/components/buttons/CreateEstrutura"; // Botões com modal integrado
-import RoleBasedAccess from "@/components/RoleBasedAccess";
+// import CreationButtons from "@/components/buttons/CreateEstrutura"; // Botões com modal integrado
+// import RoleBasedAccess from "@/components/RoleBasedAccess";
 
 import "@/app/styles/dashboard.css";
 import Head from "next/head";
@@ -44,11 +44,7 @@ export default function Dashboard() {
             {/* Seção de Boas-Vindas e Estatísticas */}
             <WelcomeStats username="João" stats={stats} />
             {/* Seção de Criação de Estruturas que vai aparecer somente para GM */}
-            <RoleBasedAccess allowedRoles={["GM"]}>
-              <h6 className="display-6"> Criação de Estruturas</h6>
-              {/* Botões de Criação com Modal Integrado */}
-              <CreationButtons />
-            </RoleBasedAccess>
+            
             {/* Seção de Campanhas */}
             <Row className="mb-5">
               <Col md={5} className="p-4 rounded shadow">

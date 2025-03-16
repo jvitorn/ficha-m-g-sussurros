@@ -27,6 +27,12 @@ export class BasicModel {
     return collection.findOne({ _id: new ObjectId(id) });
   }
 
+  async findAll() {
+    const collection = await this.getCollection();
+    const cursor = await collection.find({});
+    return await cursor.toArray();
+  }
+
   async create(data) {
     const validatedData = await this.validate(data);
     const collection = await this.getCollection();

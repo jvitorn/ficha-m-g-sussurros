@@ -9,9 +9,9 @@ import SubtituloFicha from "@/components/subtituloFicha";
 export default function ContentFichaClasse() {
   // Busca os dados e funções do contexto de atributos
   const {
-    RACA_LIST,
-    CLASSE_LIST,
-    SUBCLASSE_LIST,
+    racaList,
+    classeList,
+    subclasseList,
     classeSelecionada,
     setClasseSelecionada,
     racaSelecionada,
@@ -29,7 +29,7 @@ export default function ContentFichaClasse() {
    * @param {Event} event - Evento de mudança do select
    */
   const handleSelectRaca = (event) => {
-    const raca = RACA_LIST.find((r) => r.id == event.target.value);
+    const raca = racaList.find((r) => r.id == event.target.value);
     setRacaSelecionada(raca || null);
   };
 
@@ -39,7 +39,7 @@ export default function ContentFichaClasse() {
    */
   const handleSelectClasse = (event) => {
     const id = parseInt(event.target.value);
-    const classe = CLASSE_LIST.find((c) => c.id === id);
+    const classe = classeList.find((c) => c.id === id);
     setClasseSelecionada(classe || null);
   };
 
@@ -48,7 +48,7 @@ export default function ContentFichaClasse() {
    * @param {Event} event - Evento de mudança do select
    */
   const handleSelectSubClasse = (event) => {
-    const subclasse = SUBCLASSE_LIST.find((s) => s.id == event.target.value);
+    const subclasse = subclasseList.find((s) => s.id == event.target.value);
     setSubclasseSelecionada(subclasse || null);
   };
 
@@ -72,9 +72,9 @@ export default function ContentFichaClasse() {
                 name="raca" // ← Name adicionado aqui
               >
                 <option value="">Selecione uma Raça</option>
-                {RACA_LIST.map(({ id, nome }) => (
+                {racaList.map(({ id, name }) => (
                   <option key={id} value={id}>
-                    {nome}
+                    {name}
                   </option>
                 ))}
               </Form.Select>
@@ -91,9 +91,9 @@ export default function ContentFichaClasse() {
               <Form.Control
                 as="textarea"
                 rows={3}
-                value={racaSelecionada?.descricao || ""}
+                value={racaSelecionada?.description || ""}
                 readOnly
-                name="raca.descricao" // ← Name adicionado
+                name="raca.description" // ← Name adicionado
               />
               <Row>
                 <Col md={6}>
@@ -101,9 +101,9 @@ export default function ContentFichaClasse() {
                   <Form.Control
                     as="textarea"
                     rows={2}
-                    value={racaSelecionada?.vantagens || ""}
+                    value={racaSelecionada?.advantages || ""}
                     readOnly
-                    name="raca.vantagens" // ← Name adicionado
+                    name="raca.advantages" // ← Name adicionado
                   />
                 </Col>
                 <Col md={6}>
@@ -111,9 +111,9 @@ export default function ContentFichaClasse() {
                   <Form.Control
                     as="textarea"
                     rows={2}
-                    value={racaSelecionada?.desvantagens || ""}
+                    value={racaSelecionada?.disadvantages || ""}
                     readOnly
-                    name="raca.desvantagens" // ← Name adicionado
+                    name="raca.disadvantages" // ← Name adicionado
                   />
                 </Col>
               </Row>
@@ -130,9 +130,9 @@ export default function ContentFichaClasse() {
             name="classe" // ← Name adicionado aqui
           >
             <option value="">Selecione uma Classe</option>
-            {CLASSE_LIST.map(({ id, nome }) => (
+            {classeList.map(({ id, name }) => (
               <option key={id} value={id}>
-                {nome}
+                {name}
               </option>
             ))}
           </Form.Select>
@@ -145,9 +145,9 @@ export default function ContentFichaClasse() {
             name="subclasse" // ← Name adicionado aqui
           >
             <option value="">Selecione uma Sub Classe</option>
-            {SUBCLASSE_LIST.map(({ id, nome }) => (
+            {subclasseList.map(({ id, name }) => (
               <option key={id} value={id}>
-                {nome}
+                {name}
               </option>
             ))}
           </Form.Select>
@@ -156,9 +156,9 @@ export default function ContentFichaClasse() {
           <Form.Control
             as="textarea"
             rows={3}
-            value={subclasseSelecionada?.descricao || ""}
+            value={subclasseSelecionada?.description || ""}
             readOnly
-            name="subclasse.descricao" // ← Name adicionado
+            name="subclasse.description" // ← Name adicionado
           />
           <Row className="mt-3">
             <Col md={6}>
@@ -166,9 +166,9 @@ export default function ContentFichaClasse() {
               <Form.Control
                 as="textarea"
                 rows={2}
-                value={subclasseSelecionada?.vantagens || ""}
+                value={subclasseSelecionada?.advantages || ""}
                 readOnly
-                name="subclasse.vantagens" // ← Name adicionado
+                name="subclasse.advantages" // ← Name adicionado
               />
             </Col>
             <Col md={6}>
@@ -176,9 +176,9 @@ export default function ContentFichaClasse() {
               <Form.Control
                 as="textarea"
                 rows={2}
-                value={subclasseSelecionada?.desvantagens || ""}
+                value={subclasseSelecionada?.disadvantages || ""}
                 readOnly
-                name="subclasse.desvantagens" // ← Name adicionado
+                name="subclasse.disadvantages" // ← Name adicionado
               />
             </Col>
           </Row>

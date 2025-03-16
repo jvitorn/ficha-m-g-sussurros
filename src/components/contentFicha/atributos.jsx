@@ -10,13 +10,13 @@ export default function ContentFichaAtributos() {
     atributos,
     atualizarAtributo,
     resetAtributos,
-    NIVEL_LIST,
+    nivelList,
     nivelSelecionado,
     setNivelSelecionado,
   } = useFicha();
 
   const [pontosAtribTotal, setPontosAtribTotal] = useState(
-    NIVEL_LIST[0].pontosAtribuicao
+    nivelList[0].pontosAtribuicao
   );
   const [erro, setErro] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -50,7 +50,7 @@ export default function ContentFichaAtributos() {
   };
 
   const handleSelectNivel = (event) => {
-    const nivel = NIVEL_LIST.find((n) => n.id == event.target.value);
+    const nivel = nivelList.find((n) => n.id == event.target.value);
     if (nivel && nivel.id !== nivelSelecionado) {
       if (pontosAtributosTotal > nivel.pontosAtribuicao) {
         setProximoNivel(nivel);
@@ -129,7 +129,7 @@ export default function ContentFichaAtributos() {
             className="mb-3"
             name="nivel"
           >
-            {NIVEL_LIST.map(({ id, titulo }) => (
+            {nivelList.map(({ id, titulo }) => (
               <option key={id} value={id}>
                 {titulo}
               </option>

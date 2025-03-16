@@ -1,11 +1,13 @@
 import { config } from "dotenv";
 config({ path: ".env.local" });
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
+import bcrypt from "bcryptjs";
 import { ClassSchema } from "../src/lib/schemas/classSchema.js";
 import { SubclassSchema } from "../src/lib/schemas/subclassSchema.js";
 import { LevelSchema } from "../src/lib/schemas/levelSchema.js";
 import { RaceSchema } from "../src/lib/schemas/raceSchema.js";
 import { SpellSchema } from "../src/lib/schemas/spellSchema.js";
+import { UserSchema } from "../src/lib/schemas/userSchema.js";
 
 const MONGODB_URI = process.env.MONGODB_URI;
 const DB_NAME = process.env.MONGODB_DBNAME;
@@ -17,6 +19,7 @@ const COLLECTIONS = {
   LEVELS: "levels",
   RACES: "races",
   SPELLS: "spells",
+  USERS: "users",
 };
 
 // Função de validação
@@ -45,21 +48,88 @@ const cleanDatabase = async (db) => {
 
 // Dados para seed
 const seedData = {
+  [COLLECTIONS.USERS]: [
+    {
+      username: "gamemaster",
+      password: "Gmaster1234",
+      email: "gamemaster@gmail.com",
+      role: "gm",
+    },
+    {
+      username: "playercomum",
+      password: "Player1234",
+      email: "player@gmail.com",
+      role: "player",
+    },
+  ],
   [COLLECTIONS.CLASSES]: [
     {
       name: "Mago",
       description: "Usuário de magia arcana",
       advantages: ["Dano mágico elevado", "Versatilidade"],
       disadvantages: ["Defesa baixa", "Dependência de mana"],
+      receipt: [
+        {
+          name: "HP",
+          structure: "10 + (CM x 2) + Nivel x 6",
+          atributes: ["CM"],
+          useLevel: true,
+        },
+        {
+          name: "MP",
+          structure: "(Nivel x 3) + (POM x 2) + (CG x 2)",
+          atributes: ["POM", "CG"],
+          useLevel: true,
+        },
+        {
+          name: "DEF",
+          structure: "CM / 3",
+          atributes: ["CM"],
+          useLevel: false,
+        },
+      ],
     },
     {
       name: "Guerreiro",
       description: "Especialista em combate físico",
       advantages: ["Alta defesa", "Dano consistente"],
       disadvantages: ["Alcance curto", "Dependência de equipamento"],
+      receipt: [
+        {
+          name: "HP",
+          structure: "20 + (CM x 3) + Nivel x 4",
+          atributes: ["CM"],
+          useLevel: true,
+        },
+        {
+          name: "DEF",
+          structure: "(AGI / 2) + (CM / 2)",
+          atributes: ["AGI", "CM"],
+          useLevel: false,
+        },
+      ],
+    },
+    {
+      name: "Criação",
+      description: "Especialista em invocações e construções",
+      advantages: ["Versatilidade tática", "Defesa mágica"],
+      disadvantages: ["Dependência de preparação", "Recursos limitados"],
+      receipt: [
+        {
+          name: "HP",
+          structure: "10 + (CM x 2) + Nivel x 6",
+          atributes: ["CM"],
+          useLevel: true,
+        },
+        {
+          name: "MP",
+          structure: "CG * 2",
+          atributes: ["CG"],
+          useLevel: false,
+        },
+      ],
     },
   ],
-
   [COLLECTIONS.SUBCLASSES]: [
     {
       name: "Mago do Caos",
@@ -76,7 +146,6 @@ const seedData = {
       classId: null, // Será preenchido dinamicamente
     },
   ],
-
   [COLLECTIONS.SPELLS]: [
     {
       name: "Bola de Fogo",
@@ -101,12 +170,10 @@ const seedData = {
       subclassId: null, // Será preenchido dinamicamente
     },
   ],
-
   [COLLECTIONS.LEVELS]: [
-    { name: "Nível 1", attributePoints: 20 },
-    { name: "Nível 2", attributePoints: 24 },
+    { name: "Nível 1", attributePoints: 20, value: 1 },
+    { name: "Nível 2", attributePoints: 24, value: 2 },
   ],
-
   [COLLECTIONS.RACES]: [
     {
       name: "Humano",
@@ -134,7 +201,16 @@ async function runSeed() {
     // 1. Limpar o banco
     await cleanDatabase(db);
 
-    // 2. Inserir classes
+    // 2. Inserir usuários (com senhas criptografadas)
+    console.log("\n🌱 Inserindo usuários...");
+    const users = await processCollection(
+      db,
+      COLLECTIONS.USERS,
+      UserSchema,
+      seedData[COLLECTIONS.USERS]
+    );
+
+    // 3. Inserir classes
     console.log("\n🌱 Inserindo classes...");
     const classes = await processCollection(
       db,
@@ -143,7 +219,7 @@ async function runSeed() {
       seedData[COLLECTIONS.CLASSES]
     );
 
-    // 3. Inserir subclasses (vinculadas às classes)
+    // 4. Inserir subclasses (vinculadas às classes)
     console.log("\n🌱 Inserindo subclasses...");
     const subclasses = await processCollection(
       db,
@@ -155,7 +231,7 @@ async function runSeed() {
       }))
     );
 
-    // 4. Inserir magias (vinculadas a classes ou subclasses)
+    // 5. Inserir magias (vinculadas a classes ou subclasses)
     console.log("\n🌱 Inserindo magias...");
     const spells = await processCollection(
       db,
@@ -168,7 +244,7 @@ async function runSeed() {
       }))
     );
 
-    // 5. Inserir níveis e raças
+    // 6. Inserir níveis e raças
     console.log("\n🌱 Inserindo níveis e raças...");
     const [levels, races] = await Promise.all([
       processCollection(
@@ -185,9 +261,10 @@ async function runSeed() {
       ),
     ]);
 
-    // 6. Relatório final
+    // 7. Relatório final
     console.log("\n✅ Seed concluído com sucesso!");
     console.table({
+      Usuários: users.length,
       Classes: classes.length,
       Subclasses: subclasses.length,
       Magias: spells.length,
@@ -201,13 +278,24 @@ async function runSeed() {
   }
 }
 
-// Função genérica para processar collections
+// Função genérica para processar collections (com criptografia de senha)
 async function processCollection(db, collectionName, schema, rawData) {
-  const processedData = rawData.map((item) => ({
-    ...item,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }));
+  const processedData = await Promise.all(
+    rawData.map(async (item) => {
+      const newItem = { ...item };
+
+      // Criptografa senha se existir no documento
+      if (newItem.password) {
+        newItem.password = await bcrypt.hash(newItem.password, 10);
+      }
+
+      // Adiciona timestamps
+      newItem.createdAt = new Date();
+      newItem.updatedAt = new Date();
+
+      return newItem;
+    })
+  );
 
   const validatedData = processedData.map((data) =>
     validateWithSchema(data, schema)
