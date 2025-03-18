@@ -1,9 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Form, Row, Col } from "react-bootstrap";
-// Contexto para gerenciamento de estado global dos atributos
 import { useFicha } from "@/contexts/fichaContext";
-// Componente customizado de subtítulo
 import SubtituloFicha from "@/components/subtituloFicha";
 
 const INSPIRACAO_TOTAL = 3;
@@ -21,23 +19,22 @@ export default function ContentFichaInspiracaoDefesa() {
           <SubtituloFicha texto="Inspiração" />
           <Row>
             <Col xs={6} md={{ span: 4, offset: 2 }}>
-              <Form.Label>Disponivel</Form.Label>
+              <Form.Label>Disponível</Form.Label>
               <Form.Control
                 type="number"
                 placeholder="01"
                 value={inspiracao}
                 onChange={(e) => setInspiracao(Number(e.target.value))}
-                name="inspiracao.disponivel" // ← Name adicionado
+                name="inspiration.available"
               />
             </Col>
-            {/* Pontos totais de mana */}
             <Col xs={6} md={4}>
               <Form.Label>Total</Form.Label>
               <Form.Control
                 type="number"
                 value={INSPIRACAO_TOTAL}
                 readOnly
-                name="inspiracao.total" // ← Name adicionado
+                name="inspiration.total"
               />
             </Col>
           </Row>
@@ -52,7 +49,7 @@ export default function ContentFichaInspiracaoDefesa() {
                 value={defesaPassiva}
                 disabled
                 readOnly
-                name="defesa.passiva" // ← Name adicionado
+                name="defense.passive"
               />
             </Col>
           </Row>

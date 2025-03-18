@@ -1,13 +1,10 @@
 "use client";
-import { useState } from "react";
 import { Row, Col, Form } from "react-bootstrap";
-// Contexto para gerenciamento de estado global dos atributos
 import { useFicha } from "@/contexts/fichaContext";
-// Componente customizado de subtítulo
 import SubtituloFicha from "@/components/subtituloFicha";
+import { Controller, useFormContext } from "react-hook-form";
 
 export default function ContentFichaClasse() {
-  // Busca os dados e funções do contexto de atributos
   const {
     racaList,
     classeList,
@@ -20,64 +17,59 @@ export default function ContentFichaClasse() {
     setSubclasseSelecionada,
   } = useFicha();
 
-  // ---------------------------------------------------------------
-  // MANIPULADORES DE EVENTOS
-  // ---------------------------------------------------------------
+  const {
+    control,
+    formState: { errors },
+  } = useFormContext();
 
-  /**
-   * Manipula a seleção de raça no dropdown
-   * @param {Event} event - Evento de mudança do select
-   */
-  const handleSelectRaca = (event) => {
-    const raca = racaList.find((r) => r.id == event.target.value);
+  const handleSelectRaca = (e) => {
+    const raca = racaList.find((r) => r.id == e.target.value);
     setRacaSelecionada(raca || null);
   };
 
-  /**
-   * Manipula a seleção de subclasse no dropdown
-   * @param {Event} event - Evento de mudança do select
-   */
-  const handleSelectClasse = (event) => {
-    const id = parseInt(event.target.value);
+  const handleSelectClasse = (e) => {
+    const id = parseInt(e.target.value);
     const classe = classeList.find((c) => c.id === id);
     setClasseSelecionada(classe || null);
   };
 
-  /**
-   * Manipula a seleção de subclasse no dropdown
-   * @param {Event} event - Evento de mudança do select
-   */
-  const handleSelectSubClasse = (event) => {
-    const subclasse = subclasseList.find((s) => s.id == event.target.value);
+  const handleSelectSubClasse = (e) => {
+    const subclasse = subclasseList.find((s) => s.id == e.target.value);
     setSubclasseSelecionada(subclasse || null);
   };
 
-  // ---------------------------------------------------------------
-  // RENDERIZAÇÃO DO COMPONENTE
-  // ---------------------------------------------------------------
-
   return (
     <>
-      {/* Seção de nível e pontos de atribuição */}
       <Row className="mb-3">
-        {/* Dropdown de seleção de nível */}
         <Col xs={12} md={6}>
           <Row>
             <Col xs={12} md={12}>
               <SubtituloFicha texto="Raça" />
-              <Form.Select
-                value={racaSelecionada?.id || ""}
-                onChange={handleSelectRaca}
-                className="mb-3"
-                name="raca" // ← Name adicionado aqui
-              >
-                <option value="">Selecione uma Raça</option>
-                {racaList.map(({ id, name }) => (
-                  <option key={id} value={id}>
-                    {name}
-                  </option>
-                ))}
-              </Form.Select>
+              <Controller
+                name="race"
+                control={control}
+                rules={{ required: "Raça é obrigatória." }}
+                render={({ field }) => (
+                  <Form.Select
+                    value={racaSelecionada?.id || ""}
+                    onChange={(e) => {
+                      handleSelectRaca(e);
+                      field.onChange(e);
+                    }}
+                    isInvalid={!!errors.race}
+                  >
+                    <option value="">Selecione uma Raça</option>
+                    {racaList.map(({ id, name }) => (
+                      <option key={id} value={id}>
+                        {name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                )}
+              />
+              {errors.race && (
+                <p className="text-danger">{errors.race.message}</p>
+              )}
 
               <SubtituloFicha texto="Caracteristicas da Raça" />
               <Form.Label>Habilidade</Form.Label>
@@ -85,7 +77,7 @@ export default function ContentFichaClasse() {
                 type="text"
                 value={racaSelecionada?.habilidade || ""}
                 readOnly
-                name="raca.habilidade" // ← Name adicionado
+                name="race.hability"
               />
               <Form.Label>Descrição Geral</Form.Label>
               <Form.Control
@@ -93,7 +85,7 @@ export default function ContentFichaClasse() {
                 rows={3}
                 value={racaSelecionada?.description || ""}
                 readOnly
-                name="raca.description" // ← Name adicionado
+                name="race.description"
               />
               <Row>
                 <Col md={6}>
@@ -103,7 +95,7 @@ export default function ContentFichaClasse() {
                     rows={2}
                     value={racaSelecionada?.advantages || ""}
                     readOnly
-                    name="raca.advantages" // ← Name adicionado
+                    name="race.advantages"
                   />
                 </Col>
                 <Col md={6}>
@@ -113,7 +105,7 @@ export default function ContentFichaClasse() {
                     rows={2}
                     value={racaSelecionada?.disadvantages || ""}
                     readOnly
-                    name="raca.disadvantages" // ← Name adicionado
+                    name="race.disadvantages"
                   />
                 </Col>
               </Row>
@@ -123,34 +115,58 @@ export default function ContentFichaClasse() {
 
         <Col xs={12} md={6}>
           <SubtituloFicha texto="Classe" />
-          <Form.Select
-            value={classeSelecionada?.id || ""}
-            onChange={handleSelectClasse}
-            className="mb-3"
-            name="classe" // ← Name adicionado aqui
-          >
-            <option value="">Selecione uma Classe</option>
-            {classeList.map(({ id, name }) => (
-              <option key={id} value={id}>
-                {name}
-              </option>
-            ))}
-          </Form.Select>
+          <Controller
+            name="characterClass"
+            control={control}
+            rules={{ required: "Classe é obrigatória." }}
+            render={({ field }) => (
+              <Form.Select
+                value={classeSelecionada?.id || ""}
+                onChange={(e) => {
+                  handleSelectClasse(e);
+                  field.onChange(e);
+                }}
+                isInvalid={!!errors.characterClass}
+              >
+                <option value="">Selecione uma Classe</option>
+                {classeList.map(({ id, name }) => (
+                  <option key={id} value={id}>
+                    {name}
+                  </option>
+                ))}
+              </Form.Select>
+            )}
+          />
+          {errors.characterClass && (
+            <p className="text-danger">{errors.characterClass.message}</p>
+          )}
 
           <SubtituloFicha texto="SubClasse" />
-          <Form.Select
-            value={subclasseSelecionada?.id || ""}
-            onChange={handleSelectSubClasse}
-            className="mb-3"
-            name="subclasse" // ← Name adicionado aqui
-          >
-            <option value="">Selecione uma Sub Classe</option>
-            {subclasseList.map(({ id, name }) => (
-              <option key={id} value={id}>
-                {name}
-              </option>
-            ))}
-          </Form.Select>
+          <Controller
+            name="subclass"
+            control={control}
+            rules={{ required: "SubClasse é obrigatória." }}
+            render={({ field }) => (
+              <Form.Select
+                value={subclasseSelecionada?.id || ""}
+                onChange={(e) => {
+                  handleSelectSubClasse(e);
+                  field.onChange(e);
+                }}
+                isInvalid={!!errors.subclass}
+              >
+                <option value="">Selecione uma Sub Classe</option>
+                {subclasseList.map(({ id, name }) => (
+                  <option key={id} value={id}>
+                    {name}
+                  </option>
+                ))}
+              </Form.Select>
+            )}
+          />
+          {errors.subclass && (
+            <p className="text-danger">{errors.subclass.message}</p>
+          )}
 
           <Form.Label>Descrição Geral</Form.Label>
           <Form.Control
@@ -158,7 +174,7 @@ export default function ContentFichaClasse() {
             rows={3}
             value={subclasseSelecionada?.description || ""}
             readOnly
-            name="subclasse.description" // ← Name adicionado
+            name="subclass.description"
           />
           <Row className="mt-3">
             <Col md={6}>
@@ -168,7 +184,7 @@ export default function ContentFichaClasse() {
                 rows={2}
                 value={subclasseSelecionada?.advantages || ""}
                 readOnly
-                name="subclasse.advantages" // ← Name adicionado
+                name="subclass.advantages"
               />
             </Col>
             <Col md={6}>
@@ -178,7 +194,7 @@ export default function ContentFichaClasse() {
                 rows={2}
                 value={subclasseSelecionada?.disadvantages || ""}
                 readOnly
-                name="subclasse.disadvantages" // ← Name adicionado
+                name="subclass.disadvantages"
               />
             </Col>
           </Row>

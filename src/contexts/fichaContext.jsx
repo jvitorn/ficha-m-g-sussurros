@@ -266,8 +266,8 @@ export function FichaProvider({ children }) {
   // Dados enviados via APIs
   //  const [nivelList, setNivelList] = useState([]);
   const [nivelList, setNivelList] = useState([
-    { id: 1, titulo: "Nivel 1", valor: 1, pontosAtribuicao: 20 },
-    { id: 2, titulo: "Nivel 2", valor: 2, pontosAtribuicao: 24 },
+    { id: 1, titulo: "Nivel 1", valor: 1, attributePoints: 20 },
+    { id: 2, titulo: "Nivel 2", valor: 2, attributePoints: 24 },
     { id: 3, titulo: "Nivel 3", valor: 3, pontosAtribuicao: 28 },
     { id: 4, titulo: "Nivel 4", valor: 4, pontosAtribuicao: 32 },
     { id: 5, titulo: "Nivel 5", valor: 5, pontosAtribuicao: 36 },
@@ -376,17 +376,17 @@ export function FichaProvider({ children }) {
         {}
       );
       const nivel =
-        nivelList.find((n) => n.id === nivelSelecionado)?.valor || 0;
+        nivelList.find((n) => n.id === nivelSelecionado)?.value || 0;
 
       const params = {
-        ...formula.atributos.reduce(
+        ...formula.atributes.reduce(
           (acc, sigla) => ({ ...acc, [sigla]: atributosObj[sigla] || 0 }),
           {}
         ),
-        ...(formula.usaNivel && { Nivel: nivel }),
+        ...(formula.useLevel && { Nivel: nivel }),
       };
 
-      return calcularFormula(formula.estrutura, params);
+      return calcularFormula(formula.receipt, params);
     },
     [atributos, nivelSelecionado]
   ); // Dependências do useCallback

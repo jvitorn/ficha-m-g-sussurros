@@ -1,40 +1,33 @@
 "use client";
 
 import Head from "next/head";
-import { useRef } from "react";
 import { Container, Button } from "react-bootstrap";
 import { FichaProvider, useFicha } from "@/contexts/fichaContext";
 import DynamicAccordion from "@/components/DynamicAccordion";
 import accordionItemsFicha from "@/data/accordionItems";
-
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { useForm, FormProvider } from "react-hook-form";
 
-// Componente interno que usa o contexto
+// Componente interno que usa o contexto e o react-hook-form
 function ConteudoFicha() {
   const { nomePersonagem } = useFicha();
-  const formRef = useRef(null);
-  const pericias = [];
+  const methods = useForm(); // inicia o formulário
+  const { handleSubmit } = methods;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Captura todos os dados do formulário
-    const formData = new FormData(formRef.current);
-    console.log('formData',formData)
-    const data = Object.fromEntries(formData.entries());
-    console.log('data',data)
+  // Função de submit que envia os dados para a API
+  const onSubmit = async (data) => {
     try {
-      const response = await fetch('/api/test', {
-        method: 'POST',
+      const response = await fetch("/api/test", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
       });
 
       const result = await response.json();
-      if (!response.ok) throw new Error(result.message || "Erro no servidor");
-      
+      if (!response.ok)
+        throw new Error(result.message || "Erro no servidor");
       alert("Ficha salva com sucesso!");
       console.log("Dados enviados:", data);
     } catch (error) {
@@ -45,22 +38,25 @@ function ConteudoFicha() {
 
   return (
     <Container className="my-4">
-      <h2 className="mb-3 text-capitalize text-center">{`${
-        nomePersonagem ? nomePersonagem : "Ficha do personagem"
-      } | Sussurros do Dragão`}</h2>
-      <form ref={formRef} onSubmit={handleSubmit}>
-        <DynamicAccordion items={accordionItemsFicha} />
-        <div className="text-center mt-4">
+      <h2 className="mb-3 text-capitalize text-center">
+        {`${nomePersonagem ? nomePersonagem : "Ficha do personagem"} | Sussurros do Dragão`}
+      </h2>
+      {/* Envolvemos o formulário com o FormProvider */}
+      <FormProvider {...methods}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DynamicAccordion items={accordionItemsFicha} />
+          <div className="text-center mt-4">
             <Button variant="primary" type="submit" size="lg">
               Salvar Personagem
             </Button>
           </div>
-      </form>
+        </form>
+      </FormProvider>
     </Container>
   );
 }
 
-// Componente principal que envolve com o Provider
+// Componente principal que envolve o Provider do contexto
 export default function FichaRPG() {
   return (
     <>
@@ -70,7 +66,6 @@ export default function FichaRPG() {
       </Head>
 
       <FichaProvider>
-        {/* ... outros componentes */}
         <ThemeSwitcher />
         <ConteudoFicha />
       </FichaProvider>

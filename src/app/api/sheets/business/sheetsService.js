@@ -20,7 +20,7 @@ export class SheetsService {
         id: level._id,
         name: level.name,
         value: level.value,
-        attributes: level.attributePoints,
+        attributePoints: level.attributePoints,
       }));
     } catch (error) {
       console.error("[SheetsService] - Service error:", error);
